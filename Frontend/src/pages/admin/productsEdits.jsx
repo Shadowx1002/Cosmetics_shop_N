@@ -1,20 +1,21 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import mediaUpload from "../../utils/mediaUpload";
 
-export default function AddProductPage() {
+export default function EditProductPage() {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [productId, setProductId] = useState("");
-  const [productName, setProductName] = useState("");
-  const [altNames, setAltNames] = useState("");
-  const [description, setDescription] = useState("");
+  const [productId, setProductId] = useState(location.state.productId);
+  const [productName, setProductName] = useState(location.state.productName);
+  const [altNames, setAltNames] = useState(location.state.altNames.join(","));
+  const [description, setDescription] = useState(location.state.description);
   const [images, setImage] = useState([]);
-  const [lablePrice, setLablePrice] = useState(0);
-  const [Price, setPrice] = useState(0);
-  const [stock, setStock] = useState(0);
+  const [lablePrice, setLablePrice] = useState(location.state.lablePrice);
+  const [Price, setPrice] = useState(location.state.Price);
+  const [stock, setStock] = useState(location.state.stock);
   const [isAvailable, setIsAvailable] = useState(true);
 
   const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ export default function AddProductPage() {
     setIsAvailable(true);
   };
 
-  async function AddProduct() {
+  async function UpdateProduct() {
     const token = localStorage.getItem("token");
     console.log(token);
     if (token == null) {
@@ -56,50 +57,53 @@ export default function AddProductPage() {
       });
       return;
     }
-
-    if (images.length === 0) {
-      toast.error("Please upload at least one image.");
-      return;
-    }
+    let imageUrls=location.state.images;
     const promiseArray = [];
-
     for (let i = 0; i < images.length; i++) {
       promiseArray[i] = mediaUpload(images[i]);
     }
-
+    
     try {
-      const imageUrls = await Promise.all(promiseArray);
-
-      const altNamesArray = altNames.split(",");
-      const product = {
-        productId: productId,
-        productName: productName,
-        altNames: altNamesArray,
-        description: description,
-        images: imageUrls,
-        lablePrice: Number(lablePrice),
-        Price: Number(Price),
-        stock: Number(stock),
-        isAvailable: isAvailable,
-      };
-      axios
-        .post(import.meta.env.VITE_BACKEND_URL + "/api/products/", product, {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        })
-        .then((res) => {
-          toast.success("Product added successfully");
-          navigate("/admin/Products");
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.error("Error adding product");
-        });
+            if(images.length>0){
+                    imageUrls = await Promise.all(promiseArray);
+            }
+      
+      
     } catch (res) {
       console.log(res);
       return;
     }
+    const altNamesArray = altNames.split(",");
+    const product = {
+      productId: productId,
+      productName: productName,
+      altNames: altNamesArray,
+      description: description,
+      images: imageUrls,
+      lablePrice: Number(lablePrice),
+      Price: Number(Price),
+      stock: Number(stock),
+      isAvailable: isAvailable,
+    };
+    axios
+      .put(
+        import.meta.env.VITE_BACKEND_URL + "/api/products/" + productId,
+        product,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
+      .then((res) => {
+        toast.success("Product edited successfully");
+        console.log(imageUrls);
+        navigate("/admin/Products");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Error editing product");
+      });
   }
 
   return (
@@ -111,6 +115,7 @@ export default function AddProductPage() {
           <label className="flex flex-col">
             Product ID *
             <input
+              disabled
               value={productId}
               onChange={(e) => setProductId(e.target.value)}
               className="border p-2 rounded mt-1"
@@ -217,10 +222,10 @@ export default function AddProductPage() {
 
         <div className="flex items-center gap-3">
           <button
-            onClick={AddProduct}
+            onClick={UpdateProduct}
             className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-60"
           >
-            Add Product
+            Edit Product
           </button>
 
           <button

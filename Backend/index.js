@@ -36,8 +36,9 @@ mongoose
   .then(() => {
     console.log("Connected to MongoDB");
   })
-  .catch(() => {
+  .catch((e) => {
     console.log("Failed to connect to MongoDB");
+    
   });
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);

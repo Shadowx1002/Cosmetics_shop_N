@@ -21,10 +21,10 @@ function App() {
         
         <Header/>
         <Routes path="/*">
-          <Route path="/" element={<HomePage/>}/>
+          <Route path="/*" element={<HomePage/>}/>
           <Route path="/login" element={<LoginPage/>}/>
           
-          <Route path="/*" element={<NotFoundPage/>}/>
+          
           <Route path="/admin/*" element={<AdminPage/>}/>
           <Route path="/testpage" element={<TestPage/>}></Route>
           <Route path="/register" element={<RegisterPage/>}></Route>

@@ -1,12 +1,18 @@
+import { Route, Routes } from "react-router-dom";
+import ProductPage from "./client/productPage";
+
 export default function HomePage(){
     return(
          <div className="min-h-screen flex flex-col items-center justify-center bg-slate-100">
-      <h1 className="text-4xl font-bold text-slate-800">Welcome to MyShop</h1>
-      <p className="mt-3 text-slate-600">Your one-stop shop for awesome products.</p>
-      <div className="mt-6 flex gap-4">
-        <a href="/login" className="px-4 py-2 bg-indigo-600 text-white rounded-lg">Login</a>
-        <a href="/signup" className="px-4 py-2 bg-green-600 text-white rounded-lg">Sign Up</a>
-      </div>
+          <div className="w-full h-[calc(100vh-80px)] flex flex-col items-center">
+            <Routes path="/*">
+              <Route path="/" element={<div>Home Page</div> }/>
+              <Route path="/Product" element={<ProductPage/>}/>
+              <Route path="/About" element={<div>About Page</div>}/>
+              <Route path="/Contact" element={<div>Contact Page</div>}/>
+              <Route path="/*" element={<div className="text-3xl font-bold">404 Not Found</div>}/>
+            </Routes>
+          </div>
     </div>
     )
 }

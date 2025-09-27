@@ -9,7 +9,7 @@ export  const Sampleproducts=[
             "Mechanical Keyzzzzzboard"
         ],
         "description": "A durable mechanical keyboard with customizable RGB backlighting and anti-ghosting keyszzzzz.",
-        "image": "https://example.com/images/mechanical-gaming-keyboardzzzzzzzz.jpg",
+        "images": "https://example.com/images/mechanical-gaming-keyboardzzzzzzzz.jpg",
         "lablePrice": 892222.99,
         "Price": 69222.99,
         "stock": 82222,
@@ -26,7 +26,7 @@ export  const Sampleproducts=[
             "Surround Sound Headset"
         ],
         "description": "Comfortable gaming headset with noise-cancelling microphone and surround sound.",
-        "image": "https://example.com/images/gaming-headset.jpg",
+        "images": "https://example.com/images/gaming-headset.jpg",
         "lablePrice": 79.99,
         "Price": 54.99,
         "stock": 150,
@@ -43,7 +43,7 @@ export  const Sampleproducts=[
             "Surround Sound Headset"
         ],
         "description": "Comfortable gaming headset with noise-cancelling microphone and surround sound.",
-        "image": "https://example.com/images/gaming-headset.jpg",
+        "images": "https://example.com/images/gaming-headset.jpg",
         "lablePrice": 79.99,
         "Price": 54.99,
         "stock": 150,
@@ -61,7 +61,7 @@ export  const Sampleproducts=[
             "Surround Sound Headset"
         ],
         "description": "Comfortable gaming headset with noise-cancelling microphone and surround sound.",
-        "image": "https://example.com/images/gaming-headset.jpg",
+        "images": "https://example.com/images/gaming-headset.jpg",
         "lablePrice": 79.99,
         "Price": 54.99,
         "stock": 150,
@@ -78,7 +78,7 @@ export  const Sampleproducts=[
             "Surround Sound Headset"
         ],
         "description": "Comfortable gaming headset with noise-cancelling microphone and surround sound.",
-        "image": "https://example.com/images/gaming-headset.jpg",
+        "images": "https://example.com/images/gaming-headset.jpg",
         "lablePrice": 79.99,
         "Price": 54.99,
         "stock": 150,
