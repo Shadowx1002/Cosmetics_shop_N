@@ -25,7 +25,9 @@ export default function ProductPage(){
     )
 
     return(
+        
         <div className="w-full h-full flex flex-wrap justify-center items-center">
+            
            {
             products.map((product)=>{
                 return(
@@ -33,62 +35,7 @@ export default function ProductPage(){
                 )
             })
            }
-           {
-            products.map((product)=>{
-                return(
-                    <ProductCard key={product.productId} product={product}/>
-                )
-            })
-           }
-           {
-            products.map((product)=>{
-                return(
-                    <ProductCard key={product.productId} product={product}/>
-                )
-            })
-           }
-           {
-            products.map((product)=>{
-                return(
-                    <ProductCard key={product.productId} product={product}/>
-                )
-            })
-           }
-           {
-            products.map((product)=>{
-                return(
-                    <ProductCard key={product.productId} product={product}/>
-                )
-            })
-           }
-           {
-            products.map((product)=>{
-                return(
-                    <ProductCard key={product.productId} product={product}/>
-                )
-            })
-           }
-           {
-            products.map((product)=>{
-                return(
-                    <ProductCard key={product.productId} product={product}/>
-                )
-            })
-           }
-           {
-            products.map((product)=>{
-                return(
-                    <ProductCard key={product.productId} product={product}/>
-                )
-            })
-           }
-           {
-            products.map((product)=>{
-                return(
-                    <ProductCard key={product.productId} product={product}/>
-                )
-            })
-           }
+           
         </div>
     )
 }

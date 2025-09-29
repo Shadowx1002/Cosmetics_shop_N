@@ -1,1 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap');
 @import "tailwindcss";
+
+@theme{
+    --color-primary: #FEF3E2;
+    --color-secondary: #37353E;
+    --color-accent: #234C6A;
+    --font-family: 'Libre Baskerville', serif;
+}
