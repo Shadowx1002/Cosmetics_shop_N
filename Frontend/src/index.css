@@ -2,8 +2,10 @@
 @import "tailwindcss";
 
 @theme{
-    --color-primary: #FEF3E2;
+    --color-primary: #FAF0E6;
+    --color-new:#CBE4DE;
     --color-secondary: #37353E;
     --color-accent: #234C6A;
+    --color-new2: #EEEEEE;
     --font-family: 'Libre Baskerville', serif;
 }

@@ -1,10 +1,13 @@
 export function getCart() {
   let cart = localStorage.getItem("cart");
-  cart = JSON.parse(cart);
+  
   if (!cart) {
     cart = [];
     localStorage.setItem("cart", JSON.stringify(cart));
   }
+  else{
+    cart = JSON.parse(cart);
+  }       
   return cart;
 }
 
@@ -30,11 +33,21 @@ export function AddToCart(product, qty) {
     });
   } else {
     const newQty = cart[index].quantity + qty;
-    if (newQty > product.stock) {
+    
+    if(newQty>0){
+      if (newQty > product.stock) {
       cart[index].quantity = product.stock;
+      console.log(newQty)
     } else {
       cart[index].quantity = newQty;
+      
     }
+    }else{
+      RemoveFromCart(product.productId)
+      
+      
+      return
+  }
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));

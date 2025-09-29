@@ -5,7 +5,7 @@ export default function ImageSliderPage({ images }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   return (
-    <div className="w-[500px] h-[600px] relative bg-white rounded-3xl shadow-2xl p-4 flex flex-col items-center">
+    <div className="w-[500px] h-[600px] relative bg-new2 rounded-3xl  p-4 flex flex-col items-center">
       {/* Main Image Section */}
       <div className="relative w-full h-[500px] overflow-hidden rounded-2xl shadow-lg">
         <AnimatePresence mode="wait">
@@ -45,8 +45,8 @@ export default function ImageSliderPage({ images }) {
         {images?.map((image, index) => (
           <motion.div
             key={index}
-            className={`relative cursor-pointer rounded-xl overflow-hidden shadow-md ${
-              index === currentIndex ? "ring-4 ring-pink-500 scale-105" : "hover:scale-105"
+            className={`relative cursor-pointer rounded-lg overflow-hidden shadow-md ${
+              index === currentIndex ? "ring-4 bg-accent scale-100" : "hover:scale-105"
             } transition-transform duration-300`}
             onClick={() => setCurrentIndex(index)}
             whileHover={{ scale: 1.1 }}

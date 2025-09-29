@@ -2,7 +2,7 @@ import axios from "axios";
 import { Sampleproducts } from "../../assets/sampleData";
 import { useState } from "react";
 import { useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
 
@@ -16,7 +16,7 @@ export default function AdminProductPage() {
       axios
       .get(import.meta.env.VITE_BACKEND_URL + "/api/products/")
       .then((res) => {
-        console.log(res.data);
+        
         setProducts(res.data);
         setIsLoading(false);
       });
@@ -56,7 +56,7 @@ export default function AdminProductPage() {
     <div className="w-[70px] h-[70px] border-[5px] border-gray-300 border-t-blue-900 rounded-full animate-spin"></div>
   </div>
   :
-  <table className="w-full text-center">
+  <table className="w-full text-center ">
         <thead>
           <tr>
             <th>ProductID</th>
@@ -79,7 +79,7 @@ export default function AdminProductPage() {
                     <img
                       src={item.images[0]}
                       alt=""
-                      className="w-[100px] h-[100px]"
+                      className="w-[100px] h-[100px] border-1"
                     />
                   ) : (
                     "No image"

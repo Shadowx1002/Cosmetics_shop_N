@@ -5,7 +5,7 @@ export default function ProductCard({ product }) {
   return (
     <Link to={"/overview/" + product.productId}>
       <motion.div
-        className="w-[300px] h-[440px] bg-white shadow-xl rounded-3xl overflow-hidden m-4 flex flex-col cursor-pointer group"
+        className="w-[300px] h-[440px] bg-new shadow-xl rounded-3xl overflow-hidden m-4 flex flex-col cursor-pointer group"
         whileHover={{ scale: 1.05, y: -5 }}
         transition={{ type: "spring", stiffness: 200, damping: 15 }}
       >
@@ -58,10 +58,11 @@ export default function ProductCard({ product }) {
 
           {/* Add to Cart Button */}
           <motion.button
+          
             whileTap={{ scale: 0.95 }}
-            className="w-full mt-3 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white font-semibold py-2 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300"
+            className="w-full mt-3 bg-gradient-to-r border-2 border-accent text-accent font-semibold py-2 rounded-xl shadow-lg hover:scale-105 transition-transform duration-300"
           >
-            Add to Cart
+            Buy Now
           </motion.button>
         </div>
       </motion.div>

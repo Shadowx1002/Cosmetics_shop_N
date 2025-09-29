@@ -65,7 +65,7 @@ export default function LoginPage() {
 </div>
 
 
-      <div className="w-[50%] f-full max-w-md rounded-2xl shadow-lg p-8 backdrop-blur-md"></div>
+      <div className="w-[50%] f-full max-w-md rounded-2xl shadow-lg p-8 backdrop-blur-md">  </div>
     </div>
   );
 }
