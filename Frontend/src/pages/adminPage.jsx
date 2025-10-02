@@ -1,36 +1,36 @@
-import { Link, Routes, Route } from "react-router-dom";
+import { Link, Routes, Route, useLocation } from "react-router-dom";
 import AdminProductPage from "./admin/adminProductPage";
 import AddProductPage from "./admin/addProductPage";
 import EditProductPage from "./admin/productsEdits";
+import AdminOrdersPage from "./admin/adminOrdersPage";
+import UsersPage from "./admin/userSPage";
+import ReviewPage from "./admin/ReviewPage";
 
 export default function AdminPage() {
+  const location=useLocation();
+  const path=location.pathname;
+  function getClass(name){
+      if(path.includes(name)){
+        return "bg-accent text-white p-4 "
+      }
+      return "text-accent p-4"
+  }
   return (
-    <div className="w-full h-screen  flex ">
-      <div className="w-[200px] h-full bg-blue-900 flex flex-col">
-        <Link to="/admin/reviews">
-          <button className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 bg-black-">
-            Reviews
-          </button>
-        </Link>
-        <Link to="/admin/Products">
-          <button className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-            Products
-          </button>
-        </Link>
-        <Link to="/admin/Users">
-          <button className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
-            Users
-          </button>
-        </Link>
+    <div className="w-full h-screen  flex bg-accent ">
+      <div className="w-[200px] h-full bg-new2 flex flex-col font-bold  gap-6 text-xl">
+        <Link className={getClass("Products")}  to="/admin/Products">Products</Link>
+        <Link className={getClass("Users")}to="/admin/Users">Users</Link>
+        <Link className={getClass("Orders")}to="/admin/Orders">Orders</Link>
+        <Link className={getClass("Reviews")}to="/admin/Reviews">Reviews</Link>
       </div>
-      <div className=" h-full w-[calc(100%-200px)] ">
+      <div className=" h-full w-[calc(100%-200px)]  border-1 bg-new2 ">
         <Routes path="/*">
-          <Route path="/reviews" element={<h1>reviews</h1>}></Route>
+          <Route path="/reviews" element={<ReviewPage/>}></Route>
           <Route path="/Products" element={<AdminProductPage />}></Route>
-          <Route path="/Users" element={<h1>Users</h1>}></Route>
-          <Route path="/Add-Product" element={<AddProductPage/>}/>
-          <Route path="/edit-Product" element={<EditProductPage/>}/>
-
+          <Route path="/Orders" element={<AdminOrdersPage />}></Route>
+          <Route path="/Users" element={<UsersPage/>}></Route>
+          <Route path="/Add-Product" element={<AddProductPage />} />
+          <Route path="/edit-Product" element={<EditProductPage />} />
         </Routes>
       </div>
     </div>

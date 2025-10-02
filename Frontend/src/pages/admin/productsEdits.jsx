@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import mediaUpload from "../../utils/mediaUpload";
 
@@ -16,9 +16,8 @@ export default function EditProductPage() {
   const [lablePrice, setLablePrice] = useState(location.state.lablePrice);
   const [Price, setPrice] = useState(location.state.Price);
   const [stock, setStock] = useState(location.state.stock);
-  const [isAvailable, setIsAvailable] = useState(true);
+  const [isAvailable, setIsAvailable] = useState(location.state.isAvailable);
 
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
   const resetForm = () => {
@@ -35,17 +34,16 @@ export default function EditProductPage() {
 
   async function UpdateProduct() {
     const token = localStorage.getItem("token");
-    console.log(token);
-    if (token == null) {
+    if (!token) {
       toast.error("Please login first");
       return;
     }
 
-    // Basic validation
     if (!productId || !productName || !description) {
       setMessage({ type: "error", text: "Please fill required fields." });
       return;
     }
+
     if (
       isNaN(Number(lablePrice)) ||
       isNaN(Number(Price)) ||
@@ -57,74 +55,75 @@ export default function EditProductPage() {
       });
       return;
     }
-    let imageUrls=location.state.images;
+
+    let imageUrls = location.state.images;
     const promiseArray = [];
+
     for (let i = 0; i < images.length; i++) {
       promiseArray[i] = mediaUpload(images[i]);
     }
-    
+
     try {
-            if(images.length>0){
-                    imageUrls = await Promise.all(promiseArray);
-            }
-      
-      
-    } catch (res) {
-      console.log(res);
+      if (images.length > 0) {
+        imageUrls = await Promise.all(promiseArray);
+      }
+    } catch (err) {
+      console.log(err);
       return;
     }
+
     const altNamesArray = altNames.split(",");
     const product = {
-      productId: productId,
-      productName: productName,
+      productId,
+      productName,
       altNames: altNamesArray,
-      description: description,
+      description,
       images: imageUrls,
       lablePrice: Number(lablePrice),
       Price: Number(Price),
       stock: Number(stock),
-      isAvailable: isAvailable,
+      isAvailable,
     };
+
     axios
       .put(
         import.meta.env.VITE_BACKEND_URL + "/api/products/" + productId,
         product,
         {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
+          headers: { Authorization: "Bearer " + token },
         }
       )
-      .then((res) => {
-        toast.success("Product edited successfully");
-        console.log(imageUrls);
+      .then(() => {
+        toast.success("Product updated successfully");
         navigate("/admin/Products");
       })
       .catch((err) => {
         console.log(err);
-        toast.error("Error editing product");
+        toast.error("Error updating product");
       });
   }
 
   return (
-    <div className="w-full min-h-screen  flex flex-col justify-center items-center p-6">
-      <div className="w-full h-full ">
-        <h2 className="text-xl font-semibold">Add Product</h2>
+    <div className="w-full min-h-screen flex justify-center items-center bg-gray-50 p-6">
+      <div className="w-full max-w-3xl bg-white shadow-lg rounded-lg p-6">
+        <h2 className="text-2xl font-bold text-gray-700 mb-6">
+          ✏️ Edit Product
+        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Product ID + Name */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <label className="flex flex-col">
-            Product ID *
+            <span className="text-gray-600 font-medium">Product ID *</span>
             <input
               disabled
               value={productId}
               onChange={(e) => setProductId(e.target.value)}
-              className="border p-2 rounded mt-1"
-              placeholder="e.g. PROD123"
+              className="border p-2 rounded mt-1 bg-gray-100 cursor-not-allowed"
             />
           </label>
 
           <label className="flex flex-col">
-            Product Name *
+            <span className="text-gray-600 font-medium">Product Name *</span>
             <input
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
@@ -134,8 +133,11 @@ export default function EditProductPage() {
           </label>
         </div>
 
-        <label className="flex flex-col">
-          Alternative Names (comma separated)
+        {/* Alternative Names */}
+        <label className="flex flex-col mb-4">
+          <span className="text-gray-600 font-medium">
+            Alternative Names (comma separated)
+          </span>
           <input
             value={altNames}
             onChange={(e) => setAltNames(e.target.value)}
@@ -144,8 +146,9 @@ export default function EditProductPage() {
           />
         </label>
 
-        <label className="flex flex-col">
-          Description *
+        {/* Description */}
+        <label className="flex flex-col mb-4">
+          <span className="text-gray-600 font-medium">Description *</span>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -155,30 +158,35 @@ export default function EditProductPage() {
           />
         </label>
 
-        <label className="flex flex-col">
+        {/* File Upload */}
+        <label className="flex flex-col mb-4">
+          <span className="text-gray-600 font-medium">Upload Images</span>
           <input
             type="file"
             multiple
             onChange={(e) => setImage(e.target.files)}
             className="border p-2 rounded mt-1"
-            placeholder="https://..."
           />
         </label>
 
-        {images && (
-          <div className="flex items-center gap-4">
-            <img
-              src={images}
-              alt="preview"
-              className="w-20 h-20 object-cover rounded"
-            />
-            <span className="text-sm text-gray-600">Preview</span>
+        {/* Image Preview */}
+        {location.state.images?.length > 0 && (
+          <div className="flex flex-wrap gap-3 mb-4">
+            {location.state.images.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt="preview"
+                className="w-20 h-20 object-cover rounded border"
+              />
+            ))}
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Prices and Stock */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <label className="flex flex-col">
-            Label Price *
+            <span className="text-gray-600 font-medium">Label Price *</span>
             <input
               value={lablePrice}
               onChange={(e) => setLablePrice(e.target.value)}
@@ -189,7 +197,7 @@ export default function EditProductPage() {
           </label>
 
           <label className="flex flex-col">
-            Price *
+            <span className="text-gray-600 font-medium">Price *</span>
             <input
               value={Price}
               onChange={(e) => setPrice(e.target.value)}
@@ -200,7 +208,7 @@ export default function EditProductPage() {
           </label>
 
           <label className="flex flex-col">
-            Stock *
+            <span className="text-gray-600 font-medium">Stock *</span>
             <input
               value={stock}
               onChange={(e) => setStock(e.target.value)}
@@ -211,46 +219,50 @@ export default function EditProductPage() {
           </label>
         </div>
 
-        <label className="flex items-center gap-3">
+        {/* Availability */}
+        <label className="flex items-center gap-3 mb-4">
           <input
             type="checkbox"
             checked={isAvailable}
             onChange={(e) => setIsAvailable(e.target.checked)}
           />
-          Available
+          <span className="text-gray-600 font-medium">Available</span>
         </label>
 
-        <div className="flex items-center gap-3">
+        {/* Buttons */}
+        <div className="flex items-center gap-3 mt-4">
           <button
             onClick={UpdateProduct}
-            className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-60"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
           >
-            Edit Product
+            Save Changes
           </button>
 
           <button
             type="button"
             onClick={resetForm}
-            className="bg-gray-200 px-4 py-2 rounded"
+            className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300 transition"
           >
             Reset
           </button>
+
           <Link to="/admin/Products" className="text-blue-600 underline">
             Back to Products
           </Link>
-
-          {message && (
-            <div
-              className={
-                message.type === "success"
-                  ? "text-green-700 font-medium"
-                  : "text-red-700 font-medium"
-              }
-            >
-              {message.text}
-            </div>
-          )}
         </div>
+
+        {/* Error / Success Message */}
+        {message && (
+          <div
+            className={`mt-3 ${
+              message.type === "success"
+                ? "text-green-700"
+                : "text-red-700"
+            } font-medium`}
+          >
+            {message.text}
+          </div>
+        )}
       </div>
     </div>
   );

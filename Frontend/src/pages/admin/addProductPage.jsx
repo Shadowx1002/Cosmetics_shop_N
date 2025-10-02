@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import mediaUpload from "../../utils/mediaUpload";
 
@@ -17,7 +17,6 @@ export default function AddProductPage() {
   const [stock, setStock] = useState(0);
   const [isAvailable, setIsAvailable] = useState(true);
 
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
   const resetForm = () => {
@@ -34,8 +33,7 @@ export default function AddProductPage() {
 
   async function AddProduct() {
     const token = localStorage.getItem("token");
-    console.log(token);
-    if (token == null) {
+    if (!token) {
       toast.error("Please login first");
       return;
     }
@@ -56,169 +54,162 @@ export default function AddProductPage() {
       });
       return;
     }
-
     if (images.length === 0) {
       toast.error("Please upload at least one image.");
       return;
     }
-    const promiseArray = [];
-
-    for (let i = 0; i < images.length; i++) {
-      promiseArray[i] = mediaUpload(images[i]);
-    }
 
     try {
+      const promiseArray = Array.from(images).map((img) => mediaUpload(img));
       const imageUrls = await Promise.all(promiseArray);
 
       const altNamesArray = altNames.split(",");
       const product = {
-        productId: productId,
-        productName: productName,
+        productId,
+        productName,
         altNames: altNamesArray,
-        description: description,
+        description,
         images: imageUrls,
         lablePrice: Number(lablePrice),
         Price: Number(Price),
         stock: Number(stock),
-        isAvailable: isAvailable,
+        isAvailable,
       };
-      axios
-        .post(import.meta.env.VITE_BACKEND_URL + "/api/products/", product, {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        })
-        .then((res) => {
-          toast.success("Product added successfully");
-          navigate("/admin/Products");
-        })
-        .catch((err) => {
-          console.log(err);
-          toast.error("Error adding product");
-        });
-    } catch (res) {
-      console.log(res);
-      return;
+
+      await axios.post(
+        import.meta.env.VITE_BACKEND_URL + "/api/products/",
+        product,
+        { headers: { Authorization: "Bearer " + token } }
+      );
+
+      toast.success("Product added successfully");
+      navigate("/admin/Products");
+    } catch (err) {
+      console.log(err);
+      toast.error("Error adding product");
     }
   }
 
   return (
-    <div className="w-full min-h-screen  flex flex-col justify-center items-center p-6">
-      <div className="w-full h-full ">
-        <h2 className="text-xl font-semibold">Add Product</h2>
+    <div className="w-full min-h-screen flex justify-center items-center bg-new2 p-6">
+      <div className="w-full max-w-3xl bg-white shadow-lg rounded-xl p-8">
+        <h2 className="text-2xl font-bold text-accent mb-6">➕ Add Product</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <label className="flex flex-col">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <label className="flex flex-col text-sm font-medium text-secondary">
             Product ID *
             <input
               value={productId}
               onChange={(e) => setProductId(e.target.value)}
-              className="border p-2 rounded mt-1"
+              className="border border-gray-300 p-2 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-accent"
               placeholder="e.g. PROD123"
             />
           </label>
 
-          <label className="flex flex-col">
+          <label className="flex flex-col text-sm font-medium text-secondary">
             Product Name *
             <input
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
-              className="border p-2 rounded mt-1"
+              className="border border-gray-300 p-2 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-accent"
               placeholder="Product name"
             />
           </label>
         </div>
 
-        <label className="flex flex-col">
+        <label className="flex flex-col text-sm font-medium text-secondary mt-4">
           Alternative Names (comma separated)
           <input
             value={altNames}
             onChange={(e) => setAltNames(e.target.value)}
-            className="border p-2 rounded mt-1"
+            className="border border-gray-300 p-2 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-accent"
             placeholder="alt1, alt2, alt3"
           />
         </label>
 
-        <label className="flex flex-col">
+        <label className="flex flex-col text-sm font-medium text-secondary mt-4">
           Description *
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="border p-2 rounded mt-1"
+            className="border border-gray-300 p-2 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-accent"
             rows={4}
             placeholder="Short description"
           />
         </label>
 
-        <label className="flex flex-col">
+        <label className="flex flex-col text-sm font-medium text-secondary mt-4">
+          Upload Images *
           <input
             type="file"
             multiple
             onChange={(e) => setImage(e.target.files)}
-            className="border p-2 rounded mt-1"
-            placeholder="https://..."
+            className="border border-gray-300 p-2 rounded-lg mt-1 cursor-pointer focus:outline-none focus:ring-2 focus:ring-accent"
           />
         </label>
 
-        {images && (
-          <div className="flex items-center gap-4">
-            <img
-              src={images}
-              alt="preview"
-              className="w-20 h-20 object-cover rounded"
-            />
-            <span className="text-sm text-gray-600">Preview</span>
+        {images && images.length > 0 && (
+          <div className="flex flex-wrap gap-4 mt-3">
+            {Array.from(images).map((img, idx) => (
+              <img
+                key={idx}
+                src={URL.createObjectURL(img)}
+                alt="preview"
+                className="w-20 h-20 object-cover rounded-lg border"
+              />
+            ))}
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <label className="flex flex-col">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          <label className="flex flex-col text-sm font-medium text-secondary">
             Label Price *
             <input
               value={lablePrice}
               onChange={(e) => setLablePrice(e.target.value)}
-              className="border p-2 rounded mt-1"
+              className="border border-gray-300 p-2 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-accent"
               placeholder="0"
               inputMode="numeric"
             />
           </label>
 
-          <label className="flex flex-col">
+          <label className="flex flex-col text-sm font-medium text-secondary">
             Price *
             <input
               value={Price}
               onChange={(e) => setPrice(e.target.value)}
-              className="border p-2 rounded mt-1"
+              className="border border-gray-300 p-2 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-accent"
               placeholder="0"
               inputMode="numeric"
             />
           </label>
 
-          <label className="flex flex-col">
+          <label className="flex flex-col text-sm font-medium text-secondary">
             Stock *
             <input
               value={stock}
               onChange={(e) => setStock(e.target.value)}
-              className="border p-2 rounded mt-1"
+              className="border border-gray-300 p-2 rounded-lg mt-1 focus:outline-none focus:ring-2 focus:ring-accent"
               placeholder="0"
               inputMode="numeric"
             />
           </label>
         </div>
 
-        <label className="flex items-center gap-3">
+        <label className="flex items-center gap-3 mt-6 text-sm font-medium text-secondary">
           <input
             type="checkbox"
             checked={isAvailable}
             onChange={(e) => setIsAvailable(e.target.checked)}
+            className="w-4 h-4 text-accent focus:ring-accent border-gray-300 rounded"
           />
           Available
         </label>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-4 mt-8">
           <button
             onClick={AddProduct}
-            className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-60"
+            className="bg-accent hover:bg-secondary text-white px-6 py-2 rounded-lg font-semibold transition"
           >
             Add Product
           </button>
@@ -226,21 +217,25 @@ export default function AddProductPage() {
           <button
             type="button"
             onClick={resetForm}
-            className="bg-gray-200 px-4 py-2 rounded"
+            className="bg-gray-200 hover:bg-gray-300 px-6 py-2 rounded-lg transition"
           >
             Reset
           </button>
-          <Link to="/admin/Products" className="text-blue-600 underline">
-            Back to Products
+
+          <Link
+            to="/admin/Products"
+            className="text-accent hover:underline font-medium"
+          >
+            ← Back to Products
           </Link>
 
           {message && (
             <div
-              className={
+              className={`${
                 message.type === "success"
-                  ? "text-green-700 font-medium"
-                  : "text-red-700 font-medium"
-              }
+                  ? "text-green-600"
+                  : "text-red-600"
+              } font-medium`}
             >
               {message.text}
             </div>

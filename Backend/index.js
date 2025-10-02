@@ -6,6 +6,9 @@ import userRouter from "./routes/userRoutes.js";
 import jwt from "jsonwebtoken";
 import cors from 'cors';
 import dotenv from 'dotenv';
+
+import orderRoutes from "./routes/orderRoutes.js";
+import reviewRouter from "./routes/reviewRouter.js";
 dotenv.config();
 
 const app = express();
@@ -41,7 +44,9 @@ mongoose
     
   });
 app.use("/api/products", productRouter);
+app.use("/api/orders", orderRoutes);
 app.use("/api/users", userRouter);
+app.use("/api/reviews" , reviewRouter)
 
 app.listen(3001, () => {
   console.log("Server is running on port 3001");

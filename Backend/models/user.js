@@ -1,9 +1,6 @@
 import mongoose from "mongoose";
 
-
 const userSchema = mongoose.Schema({
-
-
   email: {
     type: String,
     required: true,
@@ -32,7 +29,6 @@ const userSchema = mongoose.Schema({
   },
   img: {
     type: String,
-    required: false,
     default:
       "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
   },
