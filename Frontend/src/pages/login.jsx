@@ -1,6 +1,8 @@
+import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { FaGoogle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 
@@ -28,7 +30,27 @@ export default function LoginPage() {
     console.log(e.response?.data || e.message);
     
   }
+
 }
+
+const LoginWithGoole = useGoogleLogin({
+        onSuccess:(response)=>{
+          const accessToken=response.access_token
+          axios.post(import.meta.env.VITE_BACKEND_URL+"/api/users/login/google",{
+            accessToken:accessToken
+          }).then((response)=>{
+          toast.success("Login Successfully")
+          const token=response.data.token;
+          localStorage.setItem("token", token)
+          if(response.data.role=="admin"){
+            navigate("/admin/")
+          }else{
+            navigate("/")
+          }
+        })
+        }
+});
+
 
 
   return (
@@ -62,6 +84,10 @@ export default function LoginPage() {
   <p className="text-center text-sm text-gray-500 mt-4">
     Don’t have an account? <a href="/register" className="text-blue-400 hover:underline">Sign up</a>
   </p>
+  <button onClick={LoginWithGoole}className="cursor-pointer flex flex-row items-center justify-center w-full gap-2 hover:scale-105 transition-transform duration-200">
+        <FaGoogle className="text-3xl"/>
+        <span> Login with google</span>
+  </button>
 </div>
 
 

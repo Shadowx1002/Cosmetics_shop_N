@@ -2,7 +2,10 @@ import User from "../models/user.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import axios from "axios";
+import nodemailer from "nodemailer";
 dotenv.config();
+import OTP from "../models/otp.js";
 
 export function createUser(req, res) {
   const hashedPassword = bcrypt.hashSync(req.body.password, 10);
@@ -102,4 +105,147 @@ export function isAdmin(req) {
     return false;
   }
   return true;
+}
+export async function LoginWithGoogle(req, res) {
+  const token = req.body.accessToken;
+  if (!token) {
+    return res.status(400).json({ message: "Access Token Required" });
+  }
+
+  // Get user info from Google
+  const response = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const existingUser = await User.findOne({ email: response.data.email });
+
+  let finalUser;
+  if (!existingUser) {
+    // Create new user
+    const newUser = new User({
+      email: response.data.email,
+      firstname: response.data.given_name,
+      lastname: response.data.family_name,
+      password: "googleUser",
+      img: response.data.picture,
+    });
+    finalUser = await newUser.save();
+  } else {
+    finalUser = existingUser;
+  }
+
+  // Generate JWT
+  const jwtToken = jwt.sign(
+    {
+      email: finalUser.email,
+      userId: finalUser._id,
+      role: finalUser.role,
+    },
+    process.env.JWT_TOKEN
+  );
+
+  res.json({
+    message: "Login Successfully",
+    token: jwtToken,
+    role: finalUser.role,
+  });
+}
+const transport=nodemailer.createTransport({
+  service:'gmail',
+  host:'smtp.gmail.com',
+  port:587,
+  secure:false,
+  auth:{
+    user:"nirodakumarasingha@gmail.com",
+    pass:process.env.GLP
+  }
+})
+export async function sendOtp(req,res){
+    const randomOTP=Math.floor(100000+Math.random()*900000);
+    const email=req.body.email;
+    if(email==null){
+      res.status(400).json({
+        message:"Email is Required"
+      })
+      return;
+    }
+    const user=await User.findOne({
+      email:email
+    })
+    if(user==null){
+      res.status(404).json({
+        message:"User Not Found"
+      })
+    }
+    //delete all otps
+    await OTP.deleteMany({
+      email:email 
+    })
+    const message={
+      from:"nirodakumarasingha@gmail.com",
+      to:email,
+      subject:"resetting password for Nero Cosmetics",
+      text:"This is your password reset OTP :" +randomOTP
+    }
+
+    const otp=new OTP({
+      email:email,
+      otp:randomOTP
+    })
+    await otp.save()
+    transport.sendMail(message,(error,info)=>{
+      if(error){
+         res.status(500).json({
+        message:"Failed to send OTP",
+        error:error
+      })
+      }else{
+        res.json({
+        message:"OTP send successfully",
+        otp:randomOTP
+      })
+      }
+    })
+}
+export async function resetPassword(req,res){
+  const otp=req.body.otp
+  const email=req.body.email
+  const newPassword=req.body.newPassword
+  
+
+
+  const response=await OTP.findOne({
+    email:email
+  })
+  if(response==null){
+    res.status(404).json({
+      message:"No OTP request found Please Try againg"
+    })
+    return;
+  }
+  if(otp==response.otp){
+    await OTP.deleteMany(
+      {email:email}
+    )
+    const hashedPassword=bcrypt.hashSync(newPassword,10)
+    const response2=await User.updateOne(
+     {email:email},
+      {
+        password:hashedPassword
+        
+
+      }
+    )
+    res.json({
+      message:"Password has been reset successfully"
+
+    })
+
+  }else{
+    res.status(403).json({
+      message:"OTP  Incorrect"
+    })
+  }
 }

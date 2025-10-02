@@ -10,11 +10,13 @@ import AdminPage from "./pages/adminPage";
 import TestPage from "./pages/testPage";
 import { Toaster } from "react-hot-toast";
 import RegisterPage from "./pages/register";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import ForgetPasswordPage from "./pages/forgetPasswordPAge";
 
 
 function App() {
   return (
-    
+    <GoogleOAuthProvider clientId="99324622557-ifqdhn97r0d6n9fgqtfp03bm0kan9dh4.apps.googleusercontent.com">
     <BrowserRouter>
       <div >
         <Toaster position='top-right'/>
@@ -23,7 +25,7 @@ function App() {
         <Routes path="/*">
         <Route path="/login" element={<LoginPage/>}/>
           <Route path="/*" element={<HomePage/>}/>
-          
+          <Route path="/forget" element={<ForgetPasswordPage/>}/>
           
           
           <Route path="/admin/*" element={<AdminPage/>}/>
@@ -38,6 +40,7 @@ function App() {
 
       </div>
     </BrowserRouter>
+    </GoogleOAuthProvider>
   )
 }
 
