@@ -16,6 +16,7 @@ import SearchProductPage from "./pages/client/searchProduct";
 import ContactUsPage from "./pages/contactUs";
 import AboutUs from "./components/AboutUs";
 import ProductPage from "./pages/client/productPage";
+import ProfilePage from "./pages/client/profile";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/search/:query" element={<SearchProductPage />} />
             <Route path="/admin/*" element={<AdminPage />} />
             <Route path="/testpage" element={<TestPage />} />
+            <Route path="/profile" element={<ProfilePage/>}/>
             <Route path="/*" element={<HomePage />} />
             <Route  element={<NotFoundPage />} />
             

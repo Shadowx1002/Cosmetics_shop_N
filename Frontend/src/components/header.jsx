@@ -78,7 +78,7 @@ export default function Header() {
             {user === "customer" && (
               
               
-              <Link to="/profile" className="hover:text-yellow-300 transition-colors duration-300">
+              <Link to={"/profile/" + localStorage.email} className="hover:text-yellow-300 transition-colors duration-300">
               Profile
               
             </Link>

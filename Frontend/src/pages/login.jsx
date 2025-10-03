@@ -18,14 +18,16 @@ export default function LoginPage() {
       { email, password }
     );
     toast.success("Success");
-    console.log(response.data);
+    
     localStorage.setItem("token",response.data.token)
+    localStorage.setItem("email",response.data.email)
 
     if(response.data.role==='admin'){
 
         window.location.href = "/admin/Products";
 
         localStorage.setItem("role","admin")
+
         toast.success("Success");
     }else{
       if(response.data.role==='customer'){
@@ -56,10 +58,13 @@ const LoginWithGoole = useGoogleLogin({
           }).then((response)=>{
           
           const token=response.data.token;
+          
           localStorage.setItem("token", token)
+          
           if(response.data.role=="admin"){
 
         localStorage.setItem("role","admin")
+        
              window.location.href = "/admin/Products";
              
 
