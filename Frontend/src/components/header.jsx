@@ -108,7 +108,7 @@ export default function Header() {
             />
           </div>
 
-          {/* Cart */}
+          
           <Link to="/cart" onClick={() => setMenuOpen(false)} className="mt-3">
             <BsCart3 className="text-3xl" /> 
           </Link>
