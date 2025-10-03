@@ -3,7 +3,7 @@ import AdminProductPage from "./admin/adminProductPage";
 import AddProductPage from "./admin/addProductPage";
 import EditProductPage from "./admin/productsEdits";
 import AdminOrdersPage from "./admin/adminOrdersPage";
-import UsersPage from "./admin/userSPage";
+import UsersPage from "./admin/usersPage";
 import ReviewPage from "./admin/ReviewPage";
 import { useEffect, useState } from "react";
 import axios from "axios";
