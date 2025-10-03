@@ -4,7 +4,7 @@ import "./App.css";
 import HomePage from "./pages/home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/login";
-import Header from "./components/Header";
+import Header from "./components/header";
 import NotFoundPage from "./pages/noFounfPage";
 import AdminPage from "./pages/adminPage";
 import TestPage from "./pages/testPage";
