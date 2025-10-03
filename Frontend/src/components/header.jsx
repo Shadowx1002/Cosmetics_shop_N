@@ -8,6 +8,14 @@ export default function Header() {
   const location = useLocation(); 
   const [search, setSearch] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  // 🔥 Check user on load
+  useEffect(() => {
+    const storedUser = localStorage.getItem("role"); 
+    setUser(storedUser);
+    console.log(user)
+  }, []);
 
   // 🔥 Debounce live search
   useEffect(() => {
@@ -25,6 +33,14 @@ export default function Header() {
       setSearch("");
     }
   }, [location]);
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    setUser(null);
+    navigate("/login");
+  };
 
   return (
     <header className="flex items-center justify-between px-6 md:px-10 py-4 bg-gradient-to-r bg-accent text-white shadow-2xl w-full h-[80px] relative">
@@ -55,6 +71,46 @@ export default function Header() {
         <Link to="/Contact" className="hover:text-yellow-300 transition-colors duration-300">
           Contact
         </Link>
+        {/* Extra buttons */}
+        {user && (
+          <>
+
+            {user === "customer" && (
+              
+              
+              <Link to="/profile" className="hover:text-yellow-300 transition-colors duration-300">
+              Profile
+              
+            </Link>
+            )}
+
+
+            
+
+
+
+            {user === "admin" && (
+              
+              <Link to="/admin" className="hover:text-yellow-300 transition-colors duration-300">
+                Admin Panel
+                
+              </Link>
+            )}
+
+
+            <button 
+              onClick={handleLogout} 
+              className="hover:text-red-400 transition-colors duration-300"
+            >
+              Logout
+            </button>
+          </>
+        )}
+        {!user && (
+          <Link to="/login" className="hover:text-yellow-300 transition-colors duration-300">
+            Login
+          </Link>
+        )}
       </nav>
 
       {/* Search + Cart (Desktop Only) */}
@@ -97,6 +153,31 @@ export default function Header() {
             Contact
           </Link>
 
+          {/* Mobile User Buttons */}
+          {user && (
+            <>
+              <Link to="/profile" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+                Profile
+              </Link>
+              {user.role === "admin" && (
+                <Link to="/admin" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+                  Admin Panel
+                </Link>
+              )}
+              <button 
+                onClick={() => { handleLogout(); setMenuOpen(false); }} 
+                className="hover:text-red-400"
+              >
+                Logout
+              </button>
+            </>
+          )}
+          {!user && (
+            <Link to="/login" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+              Login
+            </Link>
+          )}
+
           {/* Mobile Search */}
           <div className="flex items-center bg-white rounded-full overflow-hidden shadow-md w-[85%] mt-4">
             <input
@@ -108,7 +189,6 @@ export default function Header() {
             />
           </div>
 
-          
           <Link to="/cart" onClick={() => setMenuOpen(false)} className="mt-3">
             <BsCart3 className="text-3xl" /> 
           </Link>

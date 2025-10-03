@@ -22,10 +22,23 @@ export default function LoginPage() {
     localStorage.setItem("token",response.data.token)
 
     if(response.data.role==='admin'){
-        navigate('/admin/Products/');
+
+        window.location.href = "/admin/Products";
+
+        localStorage.setItem("role","admin")
+        toast.success("Success");
     }else{
-      navigate('/');
+      if(response.data.role==='customer'){
+        window.location.href = "/";
+
+        toast.success("Success");
+        localStorage.setItem("role","customer")
+        
+
+      }else{
+        window.location.href = "/login";
       toast.error("Login Failed")
+      }
     }
   } catch (e) {
     console.log(e.response?.data || e.message);
@@ -41,14 +54,23 @@ const LoginWithGoole = useGoogleLogin({
           axios.post(import.meta.env.VITE_BACKEND_URL+"/api/users/login/google",{
             accessToken:accessToken
           }).then((response)=>{
-          toast.success("Login Successfully")
+          
           const token=response.data.token;
           localStorage.setItem("token", token)
           if(response.data.role=="admin"){
-            navigate("/admin/")
+
+        localStorage.setItem("role","admin")
+             window.location.href = "/admin/Products";
+             
+
+        
           }else{
-            navigate("/")
-            toast.error("Login Failed")
+            localStorage.setItem("role","customer")
+             window.location.href = "/";
+
+        
+        
+       
           }
         })
         }

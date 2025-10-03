@@ -9,6 +9,7 @@ export default function HomePagec() {
 
   return (
     <div className="w-full flex flex-col scroll-smooth">
+      {console.log(localStorage)}
       {/* Landing Page */}
       <section className="w-full h-screen flex flex-col md:flex-row items-center justify-center bg-white overflow-hidden relative">
         {/* Left side - Image */}
