@@ -13,7 +13,7 @@ export default function UsersPage() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        import.meta.env.VITE_BACKEND_URL + "/api/users",
+        import.meta.env.VITE_BACKEND_URL + "/api/users/userdetailsa",
         {
           headers: { Authorization: "Bearer " + token },
         }
@@ -21,7 +21,7 @@ export default function UsersPage() {
       setUsers(res.data);
       setLoading(false);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       setLoading(false);
     }
   };

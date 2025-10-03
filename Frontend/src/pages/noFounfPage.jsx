@@ -2,12 +2,26 @@ import { Link } from "react-router-dom";
 
 export default function NotFoundPage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-100">
-      <h1 className="text-6xl font-bold text-slate-800">404</h1>
-      <p className="mt-4 text-lg text-slate-600">Oops! Page not found.</p>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br  text-center px-6">
+      {/* Big 404 with animation */}
+      <h1 className="text-8xl md:text-9xl font-extrabold text-accent drop-shadow-lg animate-bounce">
+        404
+      </h1>
+
+      {/* Error message */}
+      <p className="mt-4 text-lg md:text-xl text-accent">
+        Oops! The page you’re looking for doesn’t exist.
+      </p>
+
+      {/* Sub text */}
+      <p className="mt-2 text-sm md:text-base text-gray-400">
+        It might have been moved or deleted.
+      </p>
+
+      {/* Back button */}
       <Link
         to="/"
-        className="mt-6 px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
+        className="mt-8 px-6 py-3 bg-amber-950 text-white text-lg font-semibold rounded-full shadow-lg hover:bg-accent hover:scale-105 transform transition-all duration-300"
       >
         Back to Home
       </Link>

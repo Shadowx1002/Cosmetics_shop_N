@@ -1,20 +1,33 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { BsCart3 } from "react-icons/bs";
+import { FiMenu, FiX } from "react-icons/fi";
 
 export default function Header() {
   const navigate = useNavigate();
+  const location = useLocation(); 
   const [search, setSearch] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
+  // 🔥 Debounce live search
+  useEffect(() => {
     if (search.trim() !== "") {
-      navigate(`/search/${search}`);
+      const delay = setTimeout(() => {
+        navigate(`/search/${search}`);
+      }, 500);
+      return () => clearTimeout(delay);
     }
-  };
+  }, [search, navigate]);
+
+  // 🔥 Reset search bar when changing page
+  useEffect(() => {
+    if (!location.pathname.startsWith("/search")) {
+      setSearch("");
+    }
+  }, [location]);
 
   return (
-    <header className="flex items-center justify-between px-8 py-4 bg-gradient-to-r bg-accent text-white shadow-2xl w-full h-[100px]">
+    <header className="flex items-center justify-between px-6 md:px-10 py-4 bg-gradient-to-r bg-accent text-white shadow-2xl w-full h-[80px] relative">
       {/* Logo */}
       <div
         className="flex items-center cursor-pointer"
@@ -23,13 +36,13 @@ export default function Header() {
         <img
           src="/logo.png"
           alt="MyShop Logo"
-          className="w-[80px] h-[80px] object-cover rounded-full shadow-lg mr-3"
+          className="w-[50px] h-[50px] object-cover rounded-full shadow-lg mr-2"
         />
-        <span className="text-4xl font-serif font-bold">Nero Cosmetics</span>
+        <span className="text-2xl md:text-3xl font-serif font-bold">Nero Cosmetics</span>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex gap-6 text-lg md:text-xl font-semibold">
+      {/* Desktop Nav */}
+      <nav className="hidden md:flex gap-6 text-lg font-semibold">
         <Link to="/" className="hover:text-yellow-300 transition-colors duration-300">
           Home
         </Link>
@@ -44,31 +57,63 @@ export default function Header() {
         </Link>
       </nav>
 
-      {/* Search Bar */}
-      <form
-        onSubmit={handleSearch}
-        className="flex items-center bg-white rounded-full overflow-hidden shadow-md w-[300px] md:w-[400px]"
-      >
-        <input
-          type="text"
-          placeholder="Search products..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="flex-grow px-4 py-2 text-gray-800 outline-none"
-        />
-        <button
-          type="submit"
-          className="bg-gradient-to-r from-green-400 to-teal-500 px-4 py-2 text-white font-semibold hover:scale-105 transform transition duration-300"
-        >
-          Search
-        </button>
-      </form>
-      
-      <div className=" w-[80px]  flex justify-center items-center">
-        <Link to="/cart" className="text-[20px] font-bold mx-2">
-        <BsCart3 className="text-3xl"/> 
-        </Link>
+      {/* Search + Cart (Desktop Only) */}
+      <div className="hidden md:flex items-center space-x-4">
+        <div className="flex items-center bg-white rounded-full overflow-hidden shadow-md w-[220px] lg:w-[300px]">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-grow px-4 py-2 text-gray-800 outline-none text-sm"
+          />
         </div>
+        <Link to="/cart" className="text-[20px] font-bold">
+          <BsCart3 className="text-3xl" /> 
+        </Link>
+      </div>
+
+      {/* Mobile Menu Button */}
+      <button 
+        className="md:hidden text-3xl"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        {menuOpen ? <FiX /> : <FiMenu />}
+      </button>
+
+      {/* Mobile Dropdown Menu */}
+      {menuOpen && (
+        <div className="absolute top-[80px] left-0 w-full bg-indigo-700 text-white flex flex-col items-center gap-4 py-6 md:hidden shadow-lg z-50">
+          <Link to="/" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+            Home
+          </Link>
+          <Link to="/Product" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+            Product
+          </Link>
+          <Link to="/About" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+            About
+          </Link>
+          <Link to="/Contact" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+            Contact
+          </Link>
+
+          {/* Mobile Search */}
+          <div className="flex items-center bg-white rounded-full overflow-hidden shadow-md w-[85%] mt-4">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="flex-grow px-4 py-2 text-gray-800 outline-none text-sm"
+            />
+          </div>
+
+          {/* Cart */}
+          <Link to="/cart" onClick={() => setMenuOpen(false)} className="mt-3">
+            <BsCart3 className="text-3xl" /> 
+          </Link>
+        </div>
+      )}
     </header>
   );
 }

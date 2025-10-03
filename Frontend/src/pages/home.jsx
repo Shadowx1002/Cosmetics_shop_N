@@ -6,6 +6,7 @@ import CheckOutPage from "./client/checkOut";
 import HomePagec from "./homePage";
 import AboutUs from "../components/AboutUs";
 import ContactUsPage from "./contactUs";
+import NotFoundPage from "./noFounfPage";
 
 export default function HomePage(){
     return(
@@ -20,7 +21,7 @@ export default function HomePage(){
               <Route path="checkOut" element={<CheckOutPage/>}/>
               <Route path="/About" element={<AboutUs/>}/>
               <Route path="/Contact" element={<ContactUsPage/>}/>
-              <Route path="/*" element={<div className="text-3xl font-bold">404 Not Found</div>}/>
+              <Route path="/*" element={<NotFoundPage/>}/>
             </Routes>
           </div>
    

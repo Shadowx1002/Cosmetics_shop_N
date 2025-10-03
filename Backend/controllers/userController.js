@@ -28,7 +28,7 @@ export function createUser(req, res) {
     });
 }
 
-export function getUsers(req, res) {
+export function getUserforadmin(req, res) {
   User.find()
     .then((data) => {
       res.json(data);
@@ -76,7 +76,7 @@ export function loginUser(req, res) {
   });
 }
 
-// ✅ Toggle Block/Unblock user
+// Toggle Block/Unblock user
 export async function toggleBlockUser(req, res) {
   try {
     const user = await User.findById(req.params.id);
@@ -96,7 +96,19 @@ export async function toggleBlockUser(req, res) {
     res.status(500).json({ message: "Error updating user", error });
   }
 }
+export function getUsers(req,res){
+  if(req.user==null){
+    res.status(403).json({
+      message:"You are not Authorized to view user details"
+    })
+    return
+  }else{
+    res.json({
+      ...req.user
+    })
+  }
 
+}
 export function isAdmin(req) {
   if (req.user == null) {
     return false;
@@ -113,11 +125,14 @@ export async function LoginWithGoogle(req, res) {
   }
 
   // Get user info from Google
-  const response = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axios.get(
+    "https://www.googleapis.com/oauth2/v3/userinfo",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   const existingUser = await User.findOne({ email: response.data.email });
 
@@ -152,100 +167,92 @@ export async function LoginWithGoogle(req, res) {
     role: finalUser.role,
   });
 }
-const transport=nodemailer.createTransport({
-  service:'gmail',
-  host:'smtp.gmail.com',
-  port:587,
-  secure:false,
-  auth:{
-    user:"nirodakumarasingha@gmail.com",
-    pass:process.env.GLP
-  }
-})
-export async function sendOtp(req,res){
-    const randomOTP=Math.floor(100000+Math.random()*900000);
-    const email=req.body.email;
-    if(email==null){
-      res.status(400).json({
-        message:"Email is Required"
-      })
-      return;
-    }
-    const user=await User.findOne({
-      email:email
-    })
-    if(user==null){
-      res.status(404).json({
-        message:"User Not Found"
-      })
-    }
-    //delete all otps
-    await OTP.deleteMany({
-      email:email 
-    })
-    const message={
-      from:"nirodakumarasingha@gmail.com",
-      to:email,
-      subject:"resetting password for Nero Cosmetics",
-      text:"This is your password reset OTP :" +randomOTP
-    }
-
-    const otp=new OTP({
-      email:email,
-      otp:randomOTP
-    })
-    await otp.save()
-    transport.sendMail(message,(error,info)=>{
-      if(error){
-         res.status(500).json({
-        message:"Failed to send OTP",
-        error:error
-      })
-      }else{
-        res.json({
-        message:"OTP send successfully",
-        otp:randomOTP
-      })
-      }
-    })
-}
-export async function resetPassword(req,res){
-  const otp=req.body.otp
-  const email=req.body.email
-  const newPassword=req.body.newPassword
-  
-
-
-  const response=await OTP.findOne({
-    email:email
-  })
-  if(response==null){
-    res.status(404).json({
-      message:"No OTP request found Please Try againg"
-    })
+const transport = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: "nirodakumarasingha@gmail.com",
+    pass: process.env.GLP,
+  },
+});
+export async function sendOtp(req, res) {
+  const randomOTP = Math.floor(100000 + Math.random() * 900000);
+  const email = req.body.email;
+  if (email == null) {
+    res.status(400).json({
+      message: "Email is Required",
+    });
     return;
   }
-  if(otp==response.otp){
-    await OTP.deleteMany(
-      {email:email}
-    )
-    const hashedPassword=bcrypt.hashSync(newPassword,10)
-    const response2=await User.updateOne(
-     {email:email},
+  const user = await User.findOne({
+    email: email,
+  });
+  if (user == null) {
+    res.status(404).json({
+      message: "User Not Found",
+    });
+  }
+  //delete all otps
+  await OTP.deleteMany({
+    email: email,
+  });
+  const message = {
+    from: "nirodakumarasingha@gmail.com",
+    to: email,
+    subject: "resetting password for Nero Cosmetics",
+    text: "This is your password reset OTP :" + randomOTP,
+  };
+
+  const otp = new OTP({
+    email: email,
+    otp: randomOTP,
+  });
+  await otp.save();
+  transport.sendMail(message, (error, info) => {
+    if (error) {
+      res.status(500).json({
+        message: "Failed to send OTP",
+        error: error,
+      });
+    } else {
+      res.json({
+        message: "OTP send successfully",
+        otp: randomOTP,
+      });
+    }
+  });
+}
+export async function resetPassword(req, res) {
+  const otp = req.body.otp;
+  const email = req.body.email;
+  const newPassword = req.body.newPassword;
+
+  const response = await OTP.findOne({
+    email: email,
+  });
+  if (response == null) {
+    res.status(404).json({
+      message: "No OTP request found Please Try againg",
+    });
+    return;
+  }
+  if (otp == response.otp) {
+    await OTP.deleteMany({ email: email });
+    const hashedPassword = bcrypt.hashSync(newPassword, 10);
+    const response2 = await User.updateOne(
+      { email: email },
       {
-        password:hashedPassword
-        
-
+        password: hashedPassword,
       }
-    )
+    );
     res.json({
-      message:"Password has been reset successfully"
-
-    })
-
-  }else{
+      message: "Password has been reset successfully",
+    });
+  } else {
     res.status(403).json({
-      message:"OTP  Incorrect"
-    })
+      message: "OTP  Incorrect",
+    });
   }
 }

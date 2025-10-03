@@ -22,12 +22,14 @@ export default function LoginPage() {
     localStorage.setItem("token",response.data.token)
 
     if(response.data.role==='admin'){
-        navigate('/admin/');
+        navigate('/admin/Products/');
     }else{
       navigate('/');
+      toast.error("Login Failed")
     }
   } catch (e) {
     console.log(e.response?.data || e.message);
+    toast.error("Incorrect Username or Password")
     
   }
 
@@ -46,6 +48,7 @@ const LoginWithGoole = useGoogleLogin({
             navigate("/admin/")
           }else{
             navigate("/")
+            toast.error("Login Failed")
           }
         })
         }

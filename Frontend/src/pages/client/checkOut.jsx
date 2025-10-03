@@ -1,89 +1,55 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
-
 import { BiMinus, BiPlus, BiTrash } from "react-icons/bi";
 import { useLocation } from "react-router-dom";
 
 export default function CheckOutPage() {
   const location = useLocation();
   const [cart, setCart] = useState(location.state?.cart || []);
-  const[Name,setName]=useState("");
-  const[Email,setEmail]=useState("");
-  const[Address,setAddress]=useState("");
-  const[Phone,setPhone]=useState("");
-  
-console.log(Name)
-console.log(Email)
-console.log(Address)
-console.log(Phone)
+  const [Name, setName] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Address, setAddress] = useState("");
+  const [Phone, setPhone] = useState("");
 
-  //gettotal
-  console.log(cart);
-  function getTotal() {
-    let Total = 0;
-    cart.forEach((item) => {
-      Total += item.price * item.quantity;
-    });
-    return Total;
-  }
-  function removeFromCart(index) {
-    const newCart = cart.filter((item, i) => i !== index);
+  const cartTotal = cart.reduce(
+    (sum, item) => sum + (Number(item.price) || 0) * (item.quantity || 1),
+    0
+  );
+
+  const removeFromCart = (index) => {
+    const newCart = cart.filter((_, i) => i !== index);
     setCart(newCart);
-  }
+  };
 
-  function changeQty(index, quantity) {
+  const changeQty = (index, quantity) => {
     const newQty = cart[index].quantity + quantity;
     if (newQty <= 0) {
       removeFromCart(index);
       return;
     } else {
       const newCart = [...cart];
-      cart[index].quantity = newQty;
+      newCart[index].quantity = newQty;
       setCart(newCart);
     }
-  }
+  };
 
-  // Calculate total of all items
-  const cartTotal = cart.reduce(
-    (sum, item) => sum + (Number(item.price) || 0) * (item.quantity || 1),
-    0
-  );
-
-  if (cart.length === 0) {
-    return (
-      <div className="w-full h-full flex items-center justify-center text-2xl font-semibold text-gray-500">
-        Your checkout is empty
-      </div>
-    );
-  }
-
-  async function placeOrder() {
-
+  const placeOrder = async () => {
     const token = localStorage.getItem("token");
-    if(Name==null || Email==null || Phone==null || Address==null){
+    if (!Name || !Email || !Phone || !Address) {
       toast.error("Please fill all details");
-      return
+      return;
     }
     if (!token) {
       toast.error("Please log in to place order");
       return;
     }
-
     if (cart.length === 0) {
       toast.error("Cart is empty");
       return;
     }
 
-    // Replace these with real user info if available
-    const userInfo = {
-      name: Name,
-      email: Email,
-      phone: Phone,
-      address: Address,
-    };
-
-    // Prepare productList
+    const userInfo = { name: Name, email: Email, phone: Phone, address: Address };
     const productList = cart.map((item) => ({
       productInfo: {
         productId: item.productId,
@@ -98,186 +64,107 @@ console.log(Phone)
     }));
 
     const orderInformation = {
-      orderId: "ORD" + Date.now(), // simple unique orderId
+      orderId: "ORD" + Date.now(),
       ...userInfo,
-      total: cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
+      total: cartTotal,
       productList,
     };
 
     try {
-      const res = await axios.post(
-        import.meta.env.VITE_BACKEND_URL + "/api/orders",
-        orderInformation,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      );
-
+      await axios.post(import.meta.env.VITE_BACKEND_URL + "/api/orders", orderInformation, {
+        headers: { Authorization: "Bearer " + token },
+      });
       toast.success("Order placed successfully!");
-      setCart([]); // Clear cart after successful order
+      setCart([]);
     } catch (err) {
       console.error(err);
       toast.error("Error placing order");
     }
+  };
+
+  if (cart.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-2xl font-semibold text-gray-500">
+        Your checkout is empty
+      </div>
+    );
   }
 
   return (
-    <div className="grid grid-cols-2 h-screen">
-      <div className="max-w-md mt-20    p-6 space-y-4">
-        <h2 className="text-2xl font-bold text-gray-700 text-center">
-          Checkout Form
-        </h2>
+    <div className="min-h-screen  flex flex-col md:flex-row md:w-full gap-8 p-6 bg-gray-50">
+      
+      {/* Checkout Form */}
+      <div className="md:w-1/3  bg-white rounded-2xl shadow-lg p-6 space-y-4 sticky top-4 h-max mx-auto">
+        <h2 className="text-2xl font-bold text-gray-700 text-center mb-4">Checkout Form</h2>
 
-        <div className="flex flex-col">
-          <label className="mb-1 text-gray-600 font-medium">Full Name</label>
-          <input
-          value={Name}
-              onChange={(e) => setName(e.target.value)}
-            type="text"
-            className="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 p-2 rounded-lg outline-none transition"
-            placeholder="Enter your full name"
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label className="mb-1 text-gray-600 font-medium">Email</label>
-          <input
-          value={Email}
-              onChange={(e) => setEmail(e.target.value)}
-            
-            type="email"
-            className="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 p-2 rounded-lg outline-none transition"
-            placeholder="Enter your email"
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label className="mb-1 text-gray-600 font-medium">Phone</label>
-          <input
-          value={Phone}
-              onChange={(e) => setPhone(e.target.value)}
-            
-            type="tel"
-            className="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 p-2 rounded-lg outline-none transition"
-            placeholder="Enter your phone number"
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <label className="mb-1 text-gray-600 font-medium">Address</label>
-          <input
-          value={Address}
-              onChange={(e) => setAddress(e.target.value)}
-            type="text"
-            className="border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 p-2 rounded-lg outline-none transition"
-            placeholder="Enter your address"
-          />
-        </div>
+        {["Full Name", "Email", "Phone", "Address"].map((label, idx) => {
+          const stateSetters = [setName, setEmail, setPhone, setAddress];
+          const values = [Name, Email, Phone, Address];
+          const types = ["text", "email", "tel", "text"];
+          return (
+            <div key={idx} className="flex flex-col">
+              <label className="mb-1 text-gray-600 font-medium">{label}</label>
+              <input
+                type={types[idx]}
+                value={values[idx]}
+                onChange={(e) => stateSetters[idx](e.target.value)}
+                placeholder={`Enter your ${label.toLowerCase()}`}
+                className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                required
+              />
+            </div>
+          );
+        })}
 
         <button
           onClick={placeOrder}
-          className="w-full bg-accent hover:bg-green-600 text-white hover:text-accent transition py-2 px-4 rounded-lg font-semibold transition"
+          className="w-full bg-accent hover:bg-green-600 text-white hover:text-accent py-3 px-4 rounded-lg font-semibold transition"
         >
           Place Order
         </button>
       </div>
 
-      <div className="w-[70%] flex flex-col items-center justify-center">
-        {/* Cart Total */}
-
-        <div className="w-[650px] mb-10 p-4 bg-accent text-white rounded-3xl text-xl font-bold flex justify-between items-center shadow-lg">
-          <span className="text-3xl">
-            Total:{" "}
-            
-          </span>
-          <span className="text-xl text-green-500">
-              Rs.{cartTotal.toFixed(2)}
-            </span>
-
-          
+      {/* Cart Summary */}
+      <div className="md:w-2/3 flex flex-col gap-4">
+        <div className="p-4 bg-accent text-white rounded-3xl text-xl font-bold flex justify-between items-center shadow-lg">
+          <span>Total:</span>
+          <span className="text-green-400 font-semibold">Rs.{cartTotal.toFixed(2)}</span>
         </div>
 
         {cart.map((item, index) => {
           const price = Number(item.price) || 0;
           const labelPrice = Number(item.labelPrice) || 0;
-          const total = price * (item.quantity || 1);
+          const total = price * item.quantity;
 
           return (
             <div
               key={item.productId}
-              className="w-[650px] rounded-3xl bg-gray-100 shadow-lg flex flex-row mb-4 overflow-hidden"
+              className="flex flex-col md:flex-row items-center bg-white rounded-2xl shadow-md overflow-hidden p-4 gap-4"
             >
-              {/* Product Image */}
-              <img
-                src={item.image}
-                alt={item.productName}
-                className="w-[120px] h-[120px] object-cover"
-              />
+              <img src={item.image} alt={item.productName} className="w-full md:w-32 h-32 object-cover rounded-lg" />
 
-              {/* Product Info */}
-              <div className="flex-1 flex flex-col justify-center px-4 py-2">
-                <h1 className="text-lg font-bold text-secondary">
-                  {item.productName}
-                </h1>
-                <h2 className="text-sm text-gray-600 mb-2">
-                  #{item.productId}
-                </h2>
-
-                {/* Price */}
-                {labelPrice > price ? (
-                  <div className="flex items-center gap-2">
-                    <span className="text-gray-400 line-through">
-                      Rs.{labelPrice.toFixed(2)}
-                    </span>
-                    <span className="text-red-500 font-bold">
-                      Rs.{price.toFixed(2)}
-                    </span>
-                  </div>
-                ) : (
-                  <span className="text-red-500 font-bold">
-                    Rs.{price.toFixed(2)}
-                  </span>
-                )}
-
-                {/* Total */}
-                <span className="mt-1 text-gray-700 font-semibold">
-                  Total: Rs.{total.toFixed(2)}
-                </span>
-              </div>
-
-              {/* Quantity Controls */}
-              <div className="flex flex-col justify-center items-center px-4">
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => {
-                      changeQty(index, -1);
-                    }}
-                    className="w-8 h-8 text-accent rounded-full flex justify-center items-center hover:bg-red-600 hover:text-white transition"
-                  >
-                    <BiMinus />
-                  </button>
-                  <span className="text-lg font-semibold">{item.quantity}</span>
-                  <button
-                    onClick={() => {
-                      changeQty(index, 1);
-                    }}
-                    className="w-8 h-8 text-accent rounded-full flex justify-center items-center hover:bg-green-600 hover:text-white transition"
-                  >
-                    <BiPlus />
-                  </button>
+              <div className="flex-1 flex flex-col justify-center gap-1 px-2">
+                <h2 className="text-lg font-bold">{item.productName}</h2>
+                <span className="text-sm text-gray-500">#{item.productId}</span>
+                <div className="flex items-center gap-2 mt-1">
+                  {labelPrice > price && <span className="line-through text-gray-400">Rs.{labelPrice.toFixed(2)}</span>}
+                  <span className="text-red-500 font-bold">Rs.{price.toFixed(2)}</span>
                 </div>
-
-                {/* Remove Button */}
+                <span className="text-gray-700 font-semibold">Total: Rs.{total.toFixed(2)}</span>
               </div>
-              <div className="flex flex-col justify-center items-center px-4">
-                <button
-                  onClick={() => {
-                    removeFromCart(index);
-                  }}
-                  className="mt-2 w-10 h-10 bg-gray-300 text-red-600 rounded-full flex justify-center items-center hover:bg-red-600 hover:text-white transition"
-                >
+
+              <div className="flex items-center gap-2 mt-2 md:mt-0">
+                <button onClick={() => changeQty(index, -1)} className="w-10 h-10 rounded-full flex justify-center items-center hover:bg-red-600 hover:text-white transition">
+                  <BiMinus size={20} />
+                </button>
+                <span className="text-lg font-semibold">{item.quantity}</span>
+                <button onClick={() => changeQty(index, 1)} className="w-10 h-10 rounded-full flex justify-center items-center hover:bg-green-600 hover:text-white transition">
+                  <BiPlus size={20} />
+                </button>
+              </div>
+
+              <div className="flex justify-center items-center mt-2 md:mt-0">
+                <button onClick={() => removeFromCart(index)} className="w-10 h-10 bg-gray-200 text-red-600 rounded-full flex justify-center items-center hover:bg-red-600 hover:text-white transition">
                   <BiTrash size={22} />
                 </button>
               </div>
@@ -288,5 +175,3 @@ console.log(Phone)
     </div>
   );
 }
-
-//..
