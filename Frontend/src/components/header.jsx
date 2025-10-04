@@ -5,16 +5,16 @@ import { FiMenu, FiX } from "react-icons/fi";
 
 export default function Header() {
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation();
   const [search, setSearch] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
 
   // 🔥 Check user on load
   useEffect(() => {
-    const storedUser = localStorage.getItem("role"); 
+    const storedUser = localStorage.getItem("role");
     setUser(storedUser);
-    console.log(user)
+    console.log(user);
   }, []);
 
   // 🔥 Debounce live search
@@ -54,52 +54,60 @@ export default function Header() {
           alt="MyShop Logo"
           className="w-[50px] h-[50px] object-cover rounded-full shadow-lg mr-2"
         />
-        <span className="text-2xl md:text-3xl font-serif font-bold">Nero Cosmetics</span>
+        <span className="text-2xl md:text-3xl font-serif font-bold">
+          Nero Cosmetics
+        </span>
       </div>
 
       {/* Desktop Nav */}
       <nav className="hidden md:flex gap-6 text-lg font-semibold">
-        <Link to="/" className="hover:text-yellow-300 transition-colors duration-300">
+        <Link
+          to="/"
+          className="hover:text-yellow-300 transition-colors duration-300"
+        >
           Home
         </Link>
-        <Link to="/Product" className="hover:text-yellow-300 transition-colors duration-300">
+        <Link
+          to="/Product"
+          className="hover:text-yellow-300 transition-colors duration-300"
+        >
           Product
         </Link>
-        <Link to="/About" className="hover:text-yellow-300 transition-colors duration-300">
+        <Link
+          to="/About"
+          className="hover:text-yellow-300 transition-colors duration-300"
+        >
           About
         </Link>
-        <Link to="/Contact" className="hover:text-yellow-300 transition-colors duration-300">
+        <Link
+          to="/Contact"
+          className="hover:text-yellow-300 transition-colors duration-300"
+        >
           Contact
         </Link>
         {/* Extra buttons */}
         {user && (
           <>
-
             {user === "customer" && (
-              
-              
-              <Link to={"/profile/" + localStorage.email} className="hover:text-yellow-300 transition-colors duration-300">
-              Profile
-              
-            </Link>
-            )}
-
-
-            
-
-
-
-            {user === "admin" && (
-              
-              <Link to="/admin" className="hover:text-yellow-300 transition-colors duration-300">
-                Admin Panel
-                
+              <Link
+                to={"/profile/" + localStorage.email}
+                className="hover:text-yellow-300 transition-colors duration-300"
+              >
+                Profile
               </Link>
             )}
 
+            {user === "admin" && (
+              <Link
+                to="/admin"
+                className="hover:text-yellow-300 transition-colors duration-300"
+              >
+                Admin Panel
+              </Link>
+            )}
 
-            <button 
-              onClick={handleLogout} 
+            <button
+              onClick={handleLogout}
               className="hover:text-red-400 transition-colors duration-300"
             >
               Logout
@@ -107,7 +115,10 @@ export default function Header() {
           </>
         )}
         {!user && (
-          <Link to="/login" className="hover:text-yellow-300 transition-colors duration-300">
+          <Link
+            to="/login"
+            className="hover:text-yellow-300 transition-colors duration-300"
+          >
             Login
           </Link>
         )}
@@ -125,12 +136,12 @@ export default function Header() {
           />
         </div>
         <Link to="/cart" className="text-[20px] font-bold">
-          <BsCart3 className="text-3xl" /> 
+          <BsCart3 className="text-3xl" />
         </Link>
       </div>
 
       {/* Mobile Menu Button */}
-      <button 
+      <button
         className="md:hidden text-3xl"
         onClick={() => setMenuOpen(!menuOpen)}
       >
@@ -140,32 +151,59 @@ export default function Header() {
       {/* Mobile Dropdown Menu */}
       {menuOpen && (
         <div className="absolute top-[80px] left-0 w-full bg-indigo-700 text-white flex flex-col items-center gap-4 py-6 md:hidden shadow-lg z-50">
-          <Link to="/" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+          <Link
+            to="/"
+            onClick={() => setMenuOpen(false)}
+            className="hover:text-yellow-300"
+          >
             Home
           </Link>
-          <Link to="/Product" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+          <Link
+            to="/Product"
+            onClick={() => setMenuOpen(false)}
+            className="hover:text-yellow-300"
+          >
             Product
           </Link>
-          <Link to="/About" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+          <Link
+            to="/About"
+            onClick={() => setMenuOpen(false)}
+            className="hover:text-yellow-300"
+          >
             About
           </Link>
-          <Link to="/Contact" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+          <Link
+            to="/Contact"
+            onClick={() => setMenuOpen(false)}
+            className="hover:text-yellow-300"
+          >
             Contact
           </Link>
 
           {/* Mobile User Buttons */}
           {user && (
             <>
-              <Link to="/profile" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+              <Link
+                to="/profile"
+                onClick={() => setMenuOpen(false)}
+                className="hover:text-yellow-300"
+              >
                 Profile
               </Link>
               {user.role === "admin" && (
-                <Link to="/admin" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+                <Link
+                  to="/admin"
+                  onClick={() => setMenuOpen(false)}
+                  className="hover:text-yellow-300"
+                >
                   Admin Panel
                 </Link>
               )}
-              <button 
-                onClick={() => { handleLogout(); setMenuOpen(false); }} 
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setMenuOpen(false);
+                }}
                 className="hover:text-red-400"
               >
                 Logout
@@ -173,7 +211,11 @@ export default function Header() {
             </>
           )}
           {!user && (
-            <Link to="/login" onClick={() => setMenuOpen(false)} className="hover:text-yellow-300">
+            <Link
+              to="/login"
+              onClick={() => setMenuOpen(false)}
+              className="hover:text-yellow-300"
+            >
               Login
             </Link>
           )}
@@ -190,7 +232,7 @@ export default function Header() {
           </div>
 
           <Link to="/cart" onClick={() => setMenuOpen(false)} className="mt-3">
-            <BsCart3 className="text-3xl" /> 
+            <BsCart3 className="text-3xl" />
           </Link>
         </div>
       )}
