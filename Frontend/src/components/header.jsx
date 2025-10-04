@@ -9,6 +9,7 @@ export default function Header() {
   const [search, setSearch] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const email=localStorage.getItem("email")
 
   // 🔥 Check user on load
   useEffect(() => {
@@ -90,7 +91,8 @@ export default function Header() {
           <>
             {user === "customer" && (
               <Link
-                to={"/profile/" + localStorage.email}
+              state={{ email }}
+                to="/profile"
                 className="hover:text-yellow-300 transition-colors duration-300"
               >
                 Profile
@@ -185,7 +187,9 @@ export default function Header() {
             <>
               <Link
                 to="/profile"
+
                 onClick={() => setMenuOpen(false)}
+                state={{ email }}
                 className="hover:text-yellow-300"
               >
                 Profile

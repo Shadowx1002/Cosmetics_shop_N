@@ -331,6 +331,7 @@ export default function LoginPage() {
 
           <button
             onClick={setDetails}
+            state={{ email }}
             className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-semibold shadow-lg hover:scale-105 transition-transform duration-200"
           >
             Login
