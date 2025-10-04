@@ -22,18 +22,18 @@ function App() {
   return (
     <GoogleOAuthProvider clientId="99324622557-ifqdhn97r0d6n9fgqtfp03bm0kan9dh4.apps.googleusercontent.com">
       <BrowserRouter>
-        <div>
+        <div >
           <Toaster position="top-right" />
-          <Header />
+          
           <Routes path="/*">
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/forget" element={<ForgetPasswordPage />} />
-            <Route path="/search/:query" element={<SearchProductPage />} />
-            <Route path="/admin/*" element={<AdminPage />} />
-            <Route path="/testpage" element={<TestPage />} />
-            <Route path="/profile" element={<ProfilePage/>}/>
-            <Route path="/*" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />}/>
+            <Route path="/register" element={<><Header /><RegisterPage /></>} />
+            <Route path="/forget" element={<><Header /><ForgetPasswordPage /></>} />
+            <Route path="/search/:query" element={<><Header /><SearchProductPage /></>} />
+            <Route path="/admin/*" element={<><Header /><AdminPage /></>} />
+            <Route path="/testpage" element={<><Header /><TestPage /></>} />
+            <Route path="/profile" element={<><Header /><ProfilePage/></>}/>
+            <Route path="/*" element={<><Header /><HomePage /></>} />
             <Route  element={<NotFoundPage />} />
             
 
