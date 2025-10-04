@@ -17,6 +17,7 @@ import ContactUsPage from "./pages/contactUs";
 import AboutUs from "./components/AboutUs";
 import ProductPage from "./pages/client/productPage";
 import ProfilePage from "./pages/client/profile";
+import ProfileEditPage from "./pages/client/ProfileEditPage";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="/admin/*" element={<><Header /><AdminPage /></>} />
             <Route path="/testpage" element={<><Header /><TestPage /></>} />
             <Route path="/profile" element={<><Header /><ProfilePage/></>}/>
+            <Route path="/edit-profile" element={<><Header /><ProfileEditPage/></>}/>
             <Route path="/*" element={<><Header /><HomePage /></>} />
             <Route  element={<NotFoundPage />} />
             
