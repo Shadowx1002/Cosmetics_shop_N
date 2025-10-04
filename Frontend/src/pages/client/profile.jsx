@@ -93,7 +93,7 @@ export default function ProfilePage() {
       >
         {/* Profile Image */}
         <motion.img
-          src={user.image || "/default-avatar.png"}
+          src={user.img || "/default-avatar.png"}
           alt="Profile"
           className="mx-auto w-36 h-36 rounded-full object-cover border-4 border-indigo-400 shadow-lg mb-6 hover:scale-105 transition-transform duration-300"
           whileHover={{ scale: 1.05, rotate: 2 }}
