@@ -62,6 +62,7 @@ export default function LoginPage() {
 
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("email", response.data.email);
+      localStorage.setItem("isloged", "true");
 
       if (response.data.role === "admin") {
         window.location.href = "/admin/Products";

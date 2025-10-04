@@ -40,11 +40,16 @@ export default function CartPage() {
           Total: <span className="text-green-400">Rs.{cartTotal.toFixed(2)}</span>
         </span>
         <Link
+        
+
+          
           to="/checkout"
           state={{ cart }}
           className="px-4 py-2 bg-green-500 text-white rounded-2xl hover:bg-green-600 transition font-semibold text-center w-full md:w-auto"
         >
           Checkout
+
+
         </Link>
       </div>
 

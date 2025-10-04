@@ -130,6 +130,8 @@ export default function ProductOverviewPage() {
                    text-accent rounded-2xl shadow-lg font-semibold 
                    transition-all duration-300 cursor-pointer"
         onClick={()=>{
+
+          toast.success("Successfully added to cart.check your cart")
             
             AddToCart(product,1)
             
@@ -145,6 +147,8 @@ export default function ProductOverviewPage() {
                    text-accent rounded-2xl shadow-lg font-semibold 
                    transition-all duration-300 cursor-pointer"
         onClick={()=>{
+          const isloged=localStorage.getItem("isloged")
+            if(isloged){
             
             navigate("/checkout",{
               state:{
@@ -161,7 +165,10 @@ export default function ProductOverviewPage() {
                   }
                 ]
               }
-            })
+            })}else{
+              toast.error("Please Login first")
+              navigate("/login")
+            }
             
 
         }}

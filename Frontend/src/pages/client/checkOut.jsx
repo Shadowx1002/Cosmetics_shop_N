@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { BiMinus, BiPlus, BiTrash } from "react-icons/bi";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function CheckOutPage() {
   const location = useLocation();
@@ -11,6 +11,7 @@ export default function CheckOutPage() {
   const [Email, setEmail] = useState("");
   const [Address, setAddress] = useState("");
   const [Phone, setPhone] = useState("");
+  const navigate=useNavigate()
 
   const cartTotal = cart.reduce(
     (sum, item) => sum + (Number(item.price) || 0) * (item.quantity || 1),
@@ -35,7 +36,18 @@ export default function CheckOutPage() {
   };
 
   const placeOrder = async () => {
+
+
+
     const token = localStorage.getItem("token");
+    const isloged=localStorage.getItem("isloged")
+            if(!isloged){
+              toast.error("Please Login first")
+              navigate("/login")
+              return
+            }
+
+
     if (!Name || !Email || !Phone || !Address) {
       toast.error("Please fill all details");
       return;
@@ -117,10 +129,20 @@ export default function CheckOutPage() {
         })}
 
         <button
+
+
+          
+
           onClick={placeOrder}
           className="w-full bg-accent hover:bg-green-600 text-white hover:text-accent py-3 px-4 rounded-lg font-semibold transition"
         >
+
+
+
           Place Order
+
+
+
         </button>
       </div>
 
