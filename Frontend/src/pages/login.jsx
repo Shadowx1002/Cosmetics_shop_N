@@ -111,7 +111,7 @@ export default function LoginPage() {
   });
 
   return (
-    <div className="w-full h-screen flex  flex-col bg-cover bg-[url('loginnew.jpg')]">
+    <div className="w-full h-screen flex  flex-col bg-cover bg-[url('https://nvcaocehiqlliupqmhxu.supabase.co/storage/v1/object/public/images/top-view-frame-with-mascara-copy-space.jpg')]">
       <header className="flex items-center justify-between px-6 md:px-10 py-4 bg-gradient-to-r  text-black w-full h-[80px] relative">
         {/* Logo */}
         <div
