@@ -10,6 +10,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+
   const goToEditPage = () => {
     
     navigate("/edit-profile", {

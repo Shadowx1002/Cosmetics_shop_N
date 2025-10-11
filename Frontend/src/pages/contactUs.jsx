@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import axios from "axios";
+import Header from "../components/header";
 
 export default function ContactUsPage() {
   const [formData, setFormData] = useState({
@@ -31,8 +32,13 @@ export default function ContactUsPage() {
   };
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-purple-100 via-pink-50 to-yellow-50 overflow-hidden">
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-start bg-gradient-to-br from-purple-100 via-pink-50 to-yellow-50 overflow-hidden">
       
+        <div className="w-full">
+          <Header/>
+        </div>
+
+
       {/* Animated Background Circles */}
       {Array.from({ length: 15 }).map((_, i) => {
         const size = Math.random() * 60 + 20;
@@ -71,7 +77,7 @@ export default function ContactUsPage() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 1 }}
-        className="relative z-10 text-4xl md:text-5xl font-bold mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-yellow-400 to-blue-500"
+        className="relative z-10 text-4xl md:text-5xl font-bold mt-20 mb-8 text-center text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-yellow-400 to-blue-500"
       >
         Contact Us
       </motion.h2>

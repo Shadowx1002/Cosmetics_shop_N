@@ -5,11 +5,15 @@ import { FiMenu, FiX } from "react-icons/fi";
 
 export default function Header() {
   const navigate = useNavigate();
+  
+  const navigate1 = useNavigate();
+
   const location = useLocation();
   const [search, setSearch] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState(null);
   const email=localStorage.getItem("email")
+  
 
   // 🔥 Check user on load
   useEffect(() => {
@@ -55,7 +59,7 @@ export default function Header() {
             alt="MyShop Logo"
             className="w-[50px] h-[50px] object-cover rounded-full shadow-lg mr-2"
           />
-          <span className="text-2xl md:text-3xl font-serif font-bold text-white ">
+          <span className="text-2xl md:text-3xl font-serif font-bold text-black ">
             Nero Cosmetics
           </span>
         </div>
@@ -91,7 +95,8 @@ export default function Header() {
             <>
               {user === "customer" && (
                 <Link
-                  to={"/profile/" + localStorage.email}
+                  to="/Profile"
+                  state={{ email }}
                   className="hover:text-white transition-colors duration-300 hover:bg-black px-4 py-1 rounded-full"
                 >
                   Profile
@@ -103,7 +108,7 @@ export default function Header() {
                   to="/admin"
                   className="hover:text-white transition-colors duration-300 hover:bg-black px-4 py-1 rounded-full"
                 >
-                  Admin Panel
+                  AP
                 </Link>
               )}
 
@@ -185,7 +190,8 @@ export default function Header() {
             {user && (
               <>
                 <Link
-                  to="/profile"
+                  to="/Profile"
+                  state={email}
                   onClick={() => setMenuOpen(false)}
                   className="hover:text-yellow-300"
                 >

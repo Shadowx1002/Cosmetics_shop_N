@@ -10,6 +10,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { VscLoading } from "react-icons/vsc";
 import LoadingAnimation from "../components/loadingAnimation";
+import Header from "../components/header";
 
 export default function AdminPage() {
   const location = useLocation();
@@ -54,7 +55,13 @@ export default function AdminPage() {
     return "text-accent p-4";
   }
   return (
-    <div className="w-full h-screen  flex bg-accent ">
+    <div className="">
+      <div className="w-full h-  flex bg-accent">
+        <Header/>
+      </div>
+      <div className="w-full h-screen  flex bg-accent ">
+
+      
      {status=="loading"||status=="unauthenticated"?
      <LoadingAnimation/>:
       <>
@@ -73,6 +80,7 @@ export default function AdminPage() {
         </Link>
       </div>
       <div className=" h-full w-[calc(100%-200px)]  border-1 bg-new2 ">
+        
         <Routes path="/*">
           <Route path="/reviews" element={<ReviewPage />}></Route>
           <Route path="/Products" element={<AdminProductPage />}></Route>
@@ -84,5 +92,7 @@ export default function AdminPage() {
       </div>
       </>}
     </div>
+    </div>
+    
   );
 }
