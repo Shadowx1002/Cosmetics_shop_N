@@ -44,171 +44,72 @@ export default function Header() {
   };
 
   return (
-    <header className="flex items-center justify-between px-6 md:px-10 py-4 bg-gradient-to-r bg-accent text-white shadow-2xl w-full h-[80px] relative">
-      {/* Logo */}
-      <div
-        className="flex items-center cursor-pointer"
-        onClick={() => navigate("/")}
-      >
-        <img
-          src="/logo.png"
-          alt="MyShop Logo"
-          className="w-[50px] h-[50px] object-cover rounded-full shadow-lg mr-2"
-        />
-        <span className="text-2xl md:text-3xl font-serif font-bold">
-          Nero Cosmetics
-        </span>
-      </div>
-
-      {/* Desktop Nav */}
-      <nav className="hidden md:flex gap-6 text-lg font-semibold">
-        <Link
-          to="/"
-          className="hover:text-yellow-300 transition-colors duration-300"
+     <header className="flex items-center justify-between px-6 md:px-10 py-4 bg-gradient-to-r  text-black w-full h-[80px] relative">
+        {/* Logo */}
+        <div
+          className="flex items-center cursor-pointer  rounded-full px-2 hover:bg-black"
+          onClick={() => navigate1("/")}
         >
-          Home
-        </Link>
-        <Link
-          to="/Product"
-          className="hover:text-yellow-300 transition-colors duration-300"
-        >
-          Product
-        </Link>
-        <Link
-          to="/About"
-          className="hover:text-yellow-300 transition-colors duration-300"
-        >
-          About
-        </Link>
-        <Link
-          to="/Contact"
-          className="hover:text-yellow-300 transition-colors duration-300"
-        >
-          Contact
-        </Link>
-        {/* Extra buttons */}
-        {user && (
-          <>
-            {user === "customer" && (
-              <Link
-              state={{ email }}
-                to="/profile"
-                className="hover:text-yellow-300 transition-colors duration-300"
-              >
-                Profile
-              </Link>
-            )}
-
-            {user === "admin" && (
-              <Link
-                to="/admin"
-                className="hover:text-yellow-300 transition-colors duration-300"
-              >
-                Admin Panel
-              </Link>
-            )}
-
-            <button
-              onClick={handleLogout}
-              className="hover:text-red-400 transition-colors duration-300"
-            >
-              Logout
-            </button>
-          </>
-        )}
-        {!user && (
-          <Link
-            to="/login"
-            className="hover:text-yellow-300 transition-colors duration-300"
-          >
-            Login
-          </Link>
-        )}
-      </nav>
-
-      {/* Search + Cart (Desktop Only) */}
-      <div className="hidden md:flex items-center space-x-4">
-        <div className="flex items-center bg-white rounded-full overflow-hidden shadow-md w-[220px] lg:w-[300px]">
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="flex-grow px-4 py-2 text-gray-800 outline-none text-sm"
+          <img
+            src="/logo.png"
+            alt="MyShop Logo"
+            className="w-[50px] h-[50px] object-cover rounded-full shadow-lg mr-2"
           />
+          <span className="text-2xl md:text-3xl font-serif font-bold text-white ">
+            Nero Cosmetics
+          </span>
         </div>
-        <Link to="/cart" className="text-[20px] font-bold">
-          <BsCart3 className="text-3xl" />
-        </Link>
-      </div>
 
-      {/* Mobile Menu Button */}
-      <button
-        className="md:hidden text-3xl"
-        onClick={() => setMenuOpen(!menuOpen)}
-      >
-        {menuOpen ? <FiX /> : <FiMenu />}
-      </button>
-
-      {/* Mobile Dropdown Menu */}
-      {menuOpen && (
-        <div className="absolute top-[80px] left-0 w-full bg-indigo-700 text-white flex flex-col items-center gap-4 py-6 md:hidden shadow-lg z-50">
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex gap-6 text-lg font-semibold">
           <Link
             to="/"
-            onClick={() => setMenuOpen(false)}
-            className="hover:text-yellow-300"
+            className="hover:text-white transition-colors duration-300 hover:bg-black px-4 py-1 rounded-full"
           >
             Home
           </Link>
           <Link
             to="/Product"
-            onClick={() => setMenuOpen(false)}
-            className="hover:text-yellow-300"
+            className="hover:text-white transition-colors duration-300 hover:bg-black px-4 py-1 rounded-full"
           >
             Product
           </Link>
           <Link
             to="/About"
-            onClick={() => setMenuOpen(false)}
-            className="hover:text-yellow-300"
+            className="hover:text-white transition-colors duration-300 hover:bg-black px-4 py-1 rounded-full"
           >
             About
           </Link>
           <Link
             to="/Contact"
-            onClick={() => setMenuOpen(false)}
-            className="hover:text-yellow-300"
+            className="hover:text-white transition-colors duration-300 hover:bg-black px-4 py-1 rounded-full"
           >
             Contact
           </Link>
-
-          {/* Mobile User Buttons */}
+          {/* Extra buttons */}
           {user && (
             <>
-              <Link
-                to="/profile"
+              {user === "customer" && (
+                <Link
+                  to={"/profile/" + localStorage.email}
+                  className="hover:text-white transition-colors duration-300 hover:bg-black px-4 py-1 rounded-full"
+                >
+                  Profile
+                </Link>
+              )}
 
-                onClick={() => setMenuOpen(false)}
-                state={{ email }}
-                className="hover:text-yellow-300"
-              >
-                Profile
-              </Link>
-              {user.role === "admin" && (
+              {user === "admin" && (
                 <Link
                   to="/admin"
-                  onClick={() => setMenuOpen(false)}
-                  className="hover:text-yellow-300"
+                  className="hover:text-white transition-colors duration-300 hover:bg-black px-4 py-1 rounded-full"
                 >
                   Admin Panel
                 </Link>
               )}
+
               <button
-                onClick={() => {
-                  handleLogout();
-                  setMenuOpen(false);
-                }}
-                className="hover:text-red-400"
+                onClick={handleLogout}
+                className="hover:text-white transition-colors duration-300 hover:bg-black px-4 py-1 rounded-full"
               >
                 Logout
               </button>
@@ -217,15 +118,16 @@ export default function Header() {
           {!user && (
             <Link
               to="/login"
-              onClick={() => setMenuOpen(false)}
-              className="hover:text-yellow-300"
+              className="hover:text-white transition-colors duration-300 hover:bg-black px-4 py-1 rounded-full"
             >
               Login
             </Link>
           )}
+        </nav>
 
-          {/* Mobile Search */}
-          <div className="flex items-center bg-white rounded-full overflow-hidden shadow-md w-[85%] mt-4">
+        {/* Search + Cart (Desktop Only) */}
+        <div className="hidden md:flex items-center space-x-4">
+          <div className="flex items-center bg-white  rounded-full overflow-hidden shadow-md w-[220px] lg:w-[300px]">
             <input
               type="text"
               placeholder="Search products..."
@@ -234,12 +136,111 @@ export default function Header() {
               className="flex-grow px-4 py-2 text-gray-800 outline-none text-sm"
             />
           </div>
-
-          <Link to="/cart" onClick={() => setMenuOpen(false)} className="mt-3">
+          <Link to="/cart" className="text-[20px] font-bold">
             <BsCart3 className="text-3xl" />
           </Link>
         </div>
-      )}
-    </header>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-3xl"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <FiX /> : <FiMenu />}
+        </button>
+
+        {/* Mobile Dropdown Menu */}
+        {menuOpen && (
+          <div className="absolute top-[80px] left-0 w-full bg-indigo-700 text-white flex flex-col items-center gap-4 py-6 md:hidden shadow-lg z-50">
+            <Link
+              to="/"
+              onClick={() => setMenuOpen(false)}
+              className="hover:text-yellow-300"
+            >
+              Home
+            </Link>
+            <Link
+              to="/Product"
+              onClick={() => setMenuOpen(false)}
+              className="hover:text-yellow-300"
+            >
+              Product
+            </Link>
+            <Link
+              to="/About"
+              onClick={() => setMenuOpen(false)}
+              className="hover:text-yellow-300"
+            >
+              About
+            </Link>
+            <Link
+              to="/Contact"
+              onClick={() => setMenuOpen(false)}
+              className="hover:text-yellow-300"
+            >
+              Contact
+            </Link>
+
+            {/* Mobile User Buttons */}
+            {user && (
+              <>
+                <Link
+                  to="/profile"
+                  onClick={() => setMenuOpen(false)}
+                  className="hover:text-yellow-300"
+                >
+                  Profile
+                </Link>
+                {user.role === "admin" && (
+                  <Link
+                    to="/admin"
+                    onClick={() => setMenuOpen(false)}
+                    className="hover:text-yellow-300"
+                  >
+                    Admin Panel
+                  </Link>
+                )}
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setMenuOpen(false);
+                  }}
+                  className="hover:text-red-400"
+                >
+                  Logout
+                </button>
+              </>
+            )}
+            {!user && (
+              <Link
+                to="/login"
+                onClick={() => setMenuOpen(false)}
+                className="hover:text-yellow-300"
+              >
+                Login
+              </Link>
+            )}
+
+            {/* Mobile Search */}
+            <div className="flex items-center bg-white rounded-full overflow-hidden shadow-md w-[85%] mt-4">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="flex-grow px-4 py-2 text-gray-800 outline-none text-sm"
+              />
+            </div>
+
+            <Link
+              to="/cart"
+              onClick={() => setMenuOpen(false)}
+              className="mt-3"
+            >
+              <BsCart3 className="text-3xl" />
+            </Link>
+          </div>
+        )}
+      </header>
   );
 }

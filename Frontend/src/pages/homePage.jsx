@@ -3,12 +3,16 @@ import FeaturedProducts from "../components/FeaturedProducts";
 import ReviewsSection from "../components/ReviewsSection";
 import AboutUs from "../components/AboutUs";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/header";
 
 export default function HomePagec() {
   const navigate = useNavigate();
 
   return (
     <div className="w-full flex flex-col scroll-smooth">
+     <div className="bg-gradient-to-br from-accent via-new2 to-new shadow-xl">
+      <Header/>
+     </div>
       {console.log(localStorage)}
       {/* Landing Page */}
       <section className="w-full h-screen flex flex-col md:flex-row items-center justify-center bg-white overflow-hidden relative">

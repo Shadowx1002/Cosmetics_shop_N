@@ -1,6 +1,7 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import ProductCard from "../../components/productCard"
+import Header from "../../components/header"
 
 export default function ProductPage(){
 
@@ -26,7 +27,16 @@ export default function ProductPage(){
 
     return(
         
-        <div className="w-full h-full flex flex-wrap justify-center items-center ">
+        <div className="w-full h-full flex flex-wrap justify-center items- ">
+            <div className="w-full h-max  ">
+                  <Header/>
+                  
+                  
+                 </div>
+
+
+
+                 
             
            {
             products.map((product)=>{

@@ -28,14 +28,14 @@ function App() {
           
           <Routes path="/*">
             <Route path="/login" element={<LoginPage />}/>
-            <Route path="/register" element={<><Header /><RegisterPage /></>} />
-            <Route path="/forget" element={<><Header /><ForgetPasswordPage /></>} />
-            <Route path="/search/:query" element={<><Header /><SearchProductPage /></>} />
-            <Route path="/admin/*" element={<><Header /><AdminPage /></>} />
-            <Route path="/testpage" element={<><Header /><TestPage /></>} />
-            <Route path="/profile" element={<><Header /><ProfilePage/></>}/>
-            <Route path="/edit-profile" element={<><Header /><ProfileEditPage/></>}/>
-            <Route path="/*" element={<><Header /><HomePage /></>} />
+            <Route path="/register" element={<><RegisterPage /></>} />
+            <Route path="/forget" element={<><ForgetPasswordPage /></>} />
+            <Route path="/search/:query" element={<><SearchProductPage /></>} />
+            <Route path="/admin/*" element={<><AdminPage /></>} />
+            <Route path="/testpage" element={<><TestPage /></>} />
+            <Route path="/profile" element={<><ProfilePage/></>}/>
+            <Route path="/edit-profile" element={<><ProfileEditPage/></>}/>
+            <Route path="/*" element={<><HomePage /></>} />
             <Route  element={<NotFoundPage />} />
             
 

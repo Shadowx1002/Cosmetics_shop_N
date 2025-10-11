@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/header";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -29,7 +30,10 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="w-full h-screen flex justify-evenly items-center bg-center bg-cover bg-[url('login1.jpg')]">
+    <div className="w-full h-screen flex flex-col justify-evenly items-center bg-center bg-cover bg-[url('login1.jpg')]">
+    <div className="w-full h-full">
+      <Header/>
+    </div>
       <div className="w-full max-w-md mx-auto rounded-2xl shadow-2xl p-8 backdrop-blur-md bg-white/10 border border-white/20">
         <h2 className="text-2xl font-semibold text-center text-white mb-6">
           Create an Account ✨
