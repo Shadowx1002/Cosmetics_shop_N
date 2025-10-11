@@ -30,11 +30,11 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="w-full h-screen border flex flex-col justify-evenly items-center bg-center bg-cover bg-[url('https://vbewrtylhtinhtehmabt.supabase.co/storage/v1/object/public/new/cosmetics-5475903_1920.jpg')]">
-    <div className="w-full h-full">
+    <div className="w-full h-screen border flex flex-col justify-start items-center bg-center bg-cover bg-[url('https://vbewrtylhtinhtehmabt.supabase.co/storage/v1/object/public/new/cosmetics-5475903_1920.jpg')]">
+    <div className="w-full h-max ">
       <Header/>
     </div>
-      <div className="w-full max-w-md mx-auto rounded-2xl shadow-2xl p-8 backdrop-blur-md bg-white/10 border border-white/20">
+      <div className="w-full mt-25 max-w-md mx-auto rounded-2xl shadow-2xl p-8 backdrop-blur-md bg-white/10 border border-white/20">
         <h2 className="text-2xl font-semibold text-center text-white mb-6">
           Create an Account ✨
         </h2>
