@@ -112,11 +112,11 @@ export default function LoginPage() {
   });
 
   return (
-    <div className="w-full h-screen flex  flex-col bg-cover bg-[url('https://nvcaocehiqlliupqmhxu.supabase.co/storage/v1/object/public/images/top-view-frame-with-mascara-copy-space.jpg')]">
+    <div className="w-full h-screen flex  flex-col bg-cover bg-[url('https://vbewrtylhtinhtehmabt.supabase.co/storage/v1/object/public/new/makeup-5643868_1920.jpg')]">
       <header className="flex items-center justify-between px-6 md:px-10 py-4 bg-gradient-to-r  text-black w-full h-[80px] relative">
         {/* Logo */}
         <div
-          className="flex items-center cursor-pointer  rounded-full px-2 hover:bg-black"
+          className="flex items-center cursor-pointer  rounded-full px-2 hover:bg-black hover:text-white"
           onClick={() => navigate1("/")}
         >
           <img
@@ -124,7 +124,7 @@ export default function LoginPage() {
             alt="MyShop Logo"
             className="w-[50px] h-[50px] object-cover rounded-full shadow-lg mr-2"
           />
-          <span className="text-2xl md:text-3xl font-serif font-bold text-white ">
+          <span className="text-2xl md:text-3xl font-serif font-bold text-black hover:text-white">
             Nero Cosmetics
           </span>
         </div>

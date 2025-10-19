@@ -59,7 +59,7 @@ export default function Header() {
             alt="MyShop Logo"
             className="w-[50px] h-[50px] object-cover rounded-full shadow-lg mr-2"
           />
-          <span className="text-2xl md:text-3xl font-serif font-bold text-black ">
+          <span className="text-2xl md:text-3xl font-serif font-bold text-black hover:text-white ">
             Nero Cosmetics
           </span>
         </div>
